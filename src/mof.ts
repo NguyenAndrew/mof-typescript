@@ -8,6 +8,14 @@ export class Mof {
   public static FIRST = FirstOrLast.FIRST;
   public static LAST = FirstOrLast.LAST;
 
+  private constructor(
+    mocks: unknown[],
+    whenLambdas: (() => void)[],
+    verifyLambdas: (() => void)[]
+  ) {
+    console.log("Unimplemented");
+  }
+
   /**
    * Runs ALL or REMAINING whens.
    *
