@@ -64,5 +64,16 @@ export class Mof {
     console.log("Unimplemented");
   }
 
+  /**
+   * Runs ALL or REMAINING verifies.
+   * 
+   * @param aor ALL or REMAINING enum.
+   * @throws Not calling with ALL or REMAINING enum.
+   * 
+   */
+  public verify(aor: AllOrRemaining) {
+    console.log("Unimplemented");
+  }
+
   public static Builder = class { };
 }
