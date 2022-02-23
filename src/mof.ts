@@ -8,6 +8,21 @@ export class Mof {
   public static FIRST = FirstOrLast.FIRST;
   public static LAST = FirstOrLast.LAST;
 
+  private mocks: unknown[];
+  private whenLambdas: (() => void)[];
+  private verifyLambdas: (() => void)[];
+
+  private verifyNoInteractionLambda: () => void;
+
+  private mockMap: Map<unknown, number>;
+
+  private containsMoreThanOneMock: boolean;
+
+  private isMocksInCircleChain: boolean;
+
+  private remainingWhenIndex = 0;
+  private remainingVerifyIndex = 0;
+
   private constructor(
     mocks: unknown[],
     whenLambdas: (() => void)[],
