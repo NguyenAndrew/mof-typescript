@@ -36,7 +36,6 @@ export class Mof {
    *
    * @param aor - ALL or REMAINING enum.
    * @throws Not calling with ALL or REMAINING enum.
-   *
    */
   public when(aor: AllOrRemaining): void {
     console.log("Unimplemented");
@@ -69,7 +68,6 @@ export class Mof {
    * 
    * @param aor ALL or REMAINING enum.
    * @throws Not calling with ALL or REMAINING enum.
-   * 
    */
   public verify(aor: AllOrRemaining) {
     console.log("Unimplemented");
