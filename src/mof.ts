@@ -95,5 +95,16 @@ export class Mof {
     console.log("Unimplemented");
   }
 
+  /**
+   * Runs all verifies after, **not** including, the mock.
+   * 
+   * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
+   * @throws Calling with object not in mocks.
+   * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve {@code A -> B -> A}, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
+   */
+  public verifyAfter(mock: unknown): void {
+    console.log("Unimplemented");
+  }
+
   public static Builder = class { };
 }
