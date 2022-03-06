@@ -106,5 +106,12 @@ export class Mof {
     console.log("Unimplemented");
   }
 
+  private enableVerifyNoInteractions(verifyNoInteractionLambda: (() => void)): Mof {
+    this.verifyNoInteractionLambda = verifyNoInteractionLambda;
+    return this;
+  }
+
+  
+
   public static Builder = class { };
 }
