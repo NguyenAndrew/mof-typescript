@@ -111,7 +111,16 @@ export class Mof {
     return this;
   }
 
-  
+  /**
+   * Runs no interaction lambda for ALL or REMAINING mocks.
+   * 
+   * @param aor - ALL or REMAINING enum.
+   * @throws Calling this method when verifyNoInteractions is not enabled.
+   * @throws Not calling with ALL or REMAINING enum.
+   */
+  private verifyNoInteractions(aor: AllOrRemaining): void {
+    console.log("Unimplemented");
+  }
 
   public static Builder = class { };
 }
