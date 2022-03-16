@@ -78,7 +78,7 @@ export class Mof {
    * 
    * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
    * @throws Calling with object not in mocks.
-   * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve {@code A -> B -> A}, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
+   * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
    */
   public verifyThrough(mock: unknown): void {
     console.log("Unimplemented");
@@ -89,7 +89,7 @@ export class Mof {
    * 
    * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
    * @throws Calling with object not in mocks.
-   * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve {@code A -> B -> A}, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
+   * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
    */
   public verifyBefore(mock: unknown): void {
     console.log("Unimplemented");
@@ -100,7 +100,7 @@ export class Mof {
    * 
    * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
    * @throws Calling with object not in mocks.
-   * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve {@code A -> B -> A}, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
+   * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
    */
   public verifyAfter(mock: unknown): void {
     console.log("Unimplemented");
@@ -128,7 +128,7 @@ export class Mof {
    * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
    * @throws Calling this method when verifyNoInteractions is not enabled.
    * @throws Calling with object not in mocks.
-   * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve {@code A -> B -> A}, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
+   * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
    */
   public verifyNoInteractionsAfter(mock: unknown): void {
     console.log("Unimplemented");
