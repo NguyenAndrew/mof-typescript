@@ -118,7 +118,7 @@ export class Mof {
    * @throws Calling this method when verifyNoInteractions is not enabled.
    * @throws Not calling with ALL or REMAINING enum.
    */
-  private verifyNoInteractions(aor: AllOrRemaining): void {
+  public verifyNoInteractions(aor: AllOrRemaining): void {
     console.log("Unimplemented");
   }
 
