@@ -122,5 +122,17 @@ export class Mof {
     console.log("Unimplemented");
   }
 
+  /**
+   * Runs no interaction lambda for all mocks that are **only** after, but not including, mock passed into method.
+   * 
+   * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
+   * @throws Calling this method when verifyNoInteractions is not enabled.
+   * @throws Calling with object not in mocks.
+   * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve {@code A -> B -> A}, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
+   */
+  public verifyNoInteractionsAfter(mock: unknown): void {
+    console.log("Unimplemented");
+  }
+
   public static Builder = class { };
 }
