@@ -12,7 +12,7 @@ export class Mof {
   private whenLambdas: (() => void)[];
   private verifyLambdas: (() => void)[];
 
-  private verifyNoInteractionLambda: () => void;
+  private verifyNoInteractionLambda: (() => void) | null;
 
   private mockMap: Map<unknown, number>;
 
@@ -106,7 +106,7 @@ export class Mof {
     console.log("Unimplemented");
   }
 
-  private enableVerifyNoInteractions(verifyNoInteractionLambda: (() => void)): Mof {
+  private enableVerifyNoInteractions(verifyNoInteractionLambda: (() => void) | null): Mof {
     this.verifyNoInteractionLambda = verifyNoInteractionLambda;
     return this;
   }
@@ -134,5 +134,49 @@ export class Mof {
     console.log("Unimplemented");
   }
 
-  public static Builder = class { };
+  public static Builder = class { 
+    
+    _mocks: unknown[];
+    _whens: (() => void)[];
+    _verifies: (() => void)[];
+
+    _verifyNoInteractionLambda: (() => void) | null;
+
+    /**
+     * Creates a builder for Mof.
+     */
+    public constructor() {
+      this._mocks = [];
+      this._whens = [];
+      this._verifies = []; 
+      this._verifyNoInteractionLambda = null;
+    }
+
+    public add(m: unknown, w: (() => void), v: (() => void)): MofBuilder {
+        this._mocks.push(m);
+        this._whens.push(w);
+        this._verifies.push(v);
+        return this;
+    }
+
+    public enableVerifyNoInteractions(verifyNoInteractionLambda: (() => void)): MofBuilder {
+      this._verifyNoInteractionLambda = verifyNoInteractionLambda;
+      return this;
+    }
+
+    public build(): Mof {
+      const mof: Mof = new Mof(
+        this._mocks,
+        this._whens,
+        this._verifies
+      );
+      mof.enableVerifyNoInteractions(this._verifyNoInteractionLambda);
+
+      return mof;
+    }
+  };
+
+  public static builder() {
+    return new Mof.Builder();
+  }
 }
