@@ -2,6 +2,16 @@
 import { FirstOrLast } from "./first-or-last";
 import { AllOrRemaining } from "./all-or-remaining";
 
+export interface MofBuilder {
+  add(m: unknown, w: (() => void), v: (() => void)): MofBuilder;
+  enableVerifyNoInteractions(verifyNoInteractionLambda: (() => void)): MofBuilder;
+  build(): Mof;
+}
+
+export interface MofBuilderConstructor {
+  new(): MofBuilder
+}
+
 export class Mof {
   public static ALL = AllOrRemaining.ALL;
   public static REMAINING = AllOrRemaining.REMAINING;
@@ -134,49 +144,49 @@ export class Mof {
     console.log("Unimplemented");
   }
 
-  public static Builder = class { 
+  public static Builder: MofBuilderConstructor = class Builder implements MofBuilder { 
     
-    _mocks: unknown[];
-    _whens: (() => void)[];
-    _verifies: (() => void)[];
+    private mocks: unknown[];
+    private whens: (() => void)[];
+    private verifies: (() => void)[];
 
-    _verifyNoInteractionLambda: (() => void) | null;
+    private verifyNoInteractionLambda: (() => void) | null;
 
     /**
      * Creates a builder for Mof.
      */
     public constructor() {
-      this._mocks = [];
-      this._whens = [];
-      this._verifies = []; 
-      this._verifyNoInteractionLambda = null;
+      this.mocks = [];
+      this.whens = [];
+      this.verifies = []; 
+      this.verifyNoInteractionLambda = null;
     }
 
     public add(m: unknown, w: (() => void), v: (() => void)): MofBuilder {
-        this._mocks.push(m);
-        this._whens.push(w);
-        this._verifies.push(v);
+        this.mocks.push(m);
+        this.whens.push(w);
+        this.verifies.push(v);
         return this;
     }
 
     public enableVerifyNoInteractions(verifyNoInteractionLambda: (() => void)): MofBuilder {
-      this._verifyNoInteractionLambda = verifyNoInteractionLambda;
+      this.verifyNoInteractionLambda = verifyNoInteractionLambda;
       return this;
     }
 
     public build(): Mof {
       const mof: Mof = new Mof(
-        this._mocks,
-        this._whens,
-        this._verifies
+        this.mocks,
+        this.whens,
+        this.verifies
       );
-      mof.enableVerifyNoInteractions(this._verifyNoInteractionLambda);
+      mof.enableVerifyNoInteractions(this.verifyNoInteractionLambda);
 
       return mof;
     }
   };
 
-  public static builder() {
+  public static builder(): MofBuilder {
     return new Mof.Builder();
   }
 }
