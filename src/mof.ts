@@ -38,7 +38,24 @@ export class Mof {
     whenLambdas: (() => void)[],
     verifyLambdas: (() => void)[]
   ) {
-    console.log("Unimplemented");
+    this.mockMap = new Map<unknown, number>();
+
+    this.containsMoreThanOneMock = mocks.length > 1;
+
+    this.isMocksInCircleChain = mocks[0] == mocks[mocks.length - 1];
+
+    const lengthOfMocksToCheck: number = this.isMocksInCircleChain && this.containsMoreThanOneMock ? mocks.length - 1 : mocks.length;
+    for (let i = 0; i < lengthOfMocksToCheck; i++) {
+        const potentiallyDuplicateMock: unknown = this.mockMap.set(mocks[i], i);
+        const isDuplicateMock: boolean = potentiallyDuplicateMock != null;
+        if (isDuplicateMock) {
+            throw new Error(`m${i + 1} cannot be the same as a previous mock in mocks!`);
+        }
+    }
+
+    this.mocks = mocks;
+    this.whenLambdas = whenLambdas;
+    this.verifyLambdas = verifyLambdas;
   }
 
   /**
