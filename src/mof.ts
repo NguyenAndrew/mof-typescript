@@ -46,11 +46,11 @@ export class Mof {
 
     const lengthOfMocksToCheck: number = this.isMocksInCircleChain && this.containsMoreThanOneMock ? mocks.length - 1 : mocks.length;
     for (let i = 0; i < lengthOfMocksToCheck; i++) {
-        const potentiallyDuplicateMock: unknown = this.mockMap.set(mocks[i], i);
-        const isDuplicateMock: boolean = potentiallyDuplicateMock != null;
-        if (isDuplicateMock) {
-            throw new Error(`m${i + 1} cannot be the same as a previous mock in mocks!`);
-        }
+      const potentiallyDuplicateMock: unknown = this.mockMap.set(mocks[i], i);
+      const isDuplicateMock: boolean = potentiallyDuplicateMock != null;
+      if (isDuplicateMock) {
+        throw new Error(`m${i + 1} cannot be the same as a previous mock in mocks!`);
+      }
     }
 
     this.mocks = mocks;
@@ -161,8 +161,8 @@ export class Mof {
     console.log("Unimplemented");
   }
 
-  public static Builder: MofBuilderConstructor = class Builder implements MofBuilder { 
-    
+  public static Builder: MofBuilderConstructor = class Builder implements MofBuilder {
+
     private mocks: unknown[];
     private whens: (() => void)[];
     private verifies: (() => void)[];
@@ -175,15 +175,15 @@ export class Mof {
     public constructor() {
       this.mocks = [];
       this.whens = [];
-      this.verifies = []; 
+      this.verifies = [];
       this.verifyNoInteractionLambda = null;
     }
 
     public add(m: unknown, w: (() => void), v: (() => void)): MofBuilder {
-        this.mocks.push(m);
-        this.whens.push(w);
-        this.verifies.push(v);
-        return this;
+      this.mocks.push(m);
+      this.whens.push(w);
+      this.verifies.push(v);
+      return this;
     }
 
     public enableVerifyNoInteractions(verifyNoInteractionLambda: (() => void)): MofBuilder {
