@@ -46,7 +46,8 @@ export class Mof {
 
     const lengthOfMocksToCheck: number = this.isMocksInCircleChain && this.containsMoreThanOneMock ? mocks.length - 1 : mocks.length;
     for (let i = 0; i < lengthOfMocksToCheck; i++) {
-      const potentiallyDuplicateMock: unknown = this.mockMap.set(mocks[i], i);
+      const potentiallyDuplicateMock: unknown = this.mockMap.get(mocks[i]);
+      this.mockMap.set(mocks[i], i);
       const isDuplicateMock: boolean = potentiallyDuplicateMock != null;
       if (isDuplicateMock) {
         throw new Error(`m${i + 1} cannot be the same as a previous mock in mocks!`);
