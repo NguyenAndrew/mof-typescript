@@ -196,7 +196,31 @@ export class Mof {
    * @throws Not calling with ALL or REMAINING enum.
    */
   public verify(aor: AllOrRemaining): void {
-    console.log("Unimplemented");
+    if (aor == AllOrRemaining.ALL) {
+      for (let i = 0; i < this.mocks.length; i++) {
+        try {
+          this.verifyLambdas[i]();
+        } catch (e) {
+          throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e });
+        }
+      }
+      this.remainingVerifyIndex = this.mocks.length;
+      return;
+    }
+
+    if (aor == AllOrRemaining.REMAINING) {
+      for (let i = this.remainingVerifyIndex; i < this.mocks.length; i++) {
+        try {
+          this.verifyLambdas[i]();
+        } catch (e) {
+          throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e });
+        }
+      }
+      this.remainingVerifyIndex = this.mocks.length;
+      return;
+    }
+
+    throw new Error("aor must be ALL or REMAINING.");
   }
 
   /**
