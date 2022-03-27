@@ -11,6 +11,8 @@ describe('MofTest', () => {
 
     describe('Builder', () => {
 
+        const verifyNoInteractionLambda = jest.fn();
+
         test('staticMethod_success', () => {
             Mof.builder()
                 .add(
@@ -29,6 +31,27 @@ describe('MofTest', () => {
                 verify1
             )
             .build();
+        });
+
+        test('constructor_success', () => {
+            new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .build();
+        });
+
+        test('withVerifyNoInteractions_success', () => {
+            new Mof.Builder()
+                .add(
+                        mock1,
+                        when1,
+                        verify1
+                )
+                .enableVerifyNoInteractions(verifyNoInteractionLambda)
+                .build();
         });
     });
 });
