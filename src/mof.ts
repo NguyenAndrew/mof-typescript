@@ -439,7 +439,61 @@ export class Mof {
    * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
    */
   public verifyNoInteractionsAfter(mock: unknown): void {
-    console.log("Unimplemented");
+    if (this.verifyNoInteractionLambda == null) {
+      throw new Error('Must enableVerifyNoInteractions before calling verifyNoInteractionsAfter.');
+    }
+
+    let stoppingIndex: number;
+
+    if (this.isMocksInCircleChain) {
+      if (this.mocks.length == 1) {
+        stoppingIndex = this.mocks.length;
+      } else if (this.mocks.length == 2) {
+        stoppingIndex = 0;
+      } else {
+        stoppingIndex = this.mocks.length - 1;
+      }
+    } else {
+      stoppingIndex = this.mocks.length;
+    }
+
+    if (mock == FirstOrLast.FIRST) {
+      for (let i = 1; i < stoppingIndex; i++) {
+        try {
+          this.verifyNoInteractionLambda(this.mocks[i]);
+        } catch (e) {
+          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an exception! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+        }
+      }
+      this.remainingVerifyIndex = this.mocks.length;
+      return;
+    }
+
+    if (mock == FirstOrLast.LAST) {
+      // Note: This flow exists, because it creates a better user experience when refactoring between simple closed and simple open curves.
+      this.remainingVerifyIndex = this.mocks.length;
+      return;
+    }
+
+    if (this.containsMoreThanOneMock && this.isMocksInCircleChain && mock == this.mocks[0]) {
+      throw new Error('Cannot call verifyNoInteractionsAfter(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyNoInteractionsAfter(FIRST) or verifyNoInteractionsAfter(LAST).');
+    }
+
+    const objectIndexOfMock: number | undefined = this.mockMap.get(mock);
+
+    if (objectIndexOfMock == null) {
+      throw new Error('Cannot call verifyNoInteractionsAfter(Object mock) for mock not in mocks!');
+    }
+
+    for (let i = objectIndexOfMock + 1; i < stoppingIndex; i++) {
+      try {
+        this.verifyNoInteractionLambda(this.mocks[i]);
+      } catch (e) {
+        throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an exception! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+      }
+    }
+
+    this.remainingVerifyIndex = this.mocks.length;
   }
 
   public static Builder: MofBuilderConstructor = class Builder implements MofBuilder {
