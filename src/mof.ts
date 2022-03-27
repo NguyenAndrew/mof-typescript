@@ -65,7 +65,31 @@ export class Mof {
    * @throws Not calling with ALL or REMAINING enum.
    */
   public when(aor: AllOrRemaining): void {
-    console.log("Unimplemented");
+    if (aor == AllOrRemaining.ALL) {
+      for (let i = 0; i < this.mocks.length; i++) {
+        try {
+          this.whenLambdas[i]();
+        } catch (e) {
+          throw new Error(`w${i + 1} throws an exception! Please check your whens.`, { cause: e });
+        }
+      }
+      this.remainingWhenIndex = this.mocks.length;
+      return;
+    }
+
+    if (aor == AllOrRemaining.REMAINING) {
+      for (let i = this.remainingWhenIndex; i < this.mocks.length; i++) {
+        try {
+          this.whenLambdas[i]();
+        } catch (e) {
+          throw new Error(`w${i + 1} throws an exception! Please check your whens.`, { cause: e });
+        }
+      }
+      this.remainingWhenIndex = this.mocks.length;
+      return;
+    }
+
+    throw new Error("aor must be ALL or REMAINING.");
   }
 
   /**
