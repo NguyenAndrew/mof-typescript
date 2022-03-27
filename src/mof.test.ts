@@ -134,5 +134,19 @@ describe('MofTest', () => {
                 )
                 .build();
         });
+
+        test('whenMocksIsNull_ThenThrowIllegalArgumentException', () => {
+            const expectedMessage = 'Cannot add null Mock to Mof Builder!';
+
+            expect(() => {
+                new Mof.Builder()
+                    .add(
+                        null,
+                        when1,
+                        verify1
+                    )
+                    .build()
+            }).toThrow(expectedMessage);
+        });
     });
 });
