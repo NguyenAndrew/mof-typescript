@@ -22,7 +22,7 @@ export class Mof {
   private whenLambdas: (() => void)[];
   private verifyLambdas: (() => void)[];
 
-  private verifyNoInteractionLambda: (() => void) | null;
+  private verifyNoInteractionLambda: (() => void) | null = null;
 
   private mockMap: Map<unknown, number>;
 
