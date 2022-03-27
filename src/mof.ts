@@ -231,7 +231,49 @@ export class Mof {
    * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
    */
   public verifyThrough(mock: unknown): void {
-    console.log("Unimplemented");
+    if (mock == FirstOrLast.FIRST) {
+      try {
+        this.verifyLambdas[0]();
+      } catch (e) {
+        throw new Error(`v${1} throws an exception! Please check your verifies.`, { cause: e as Error });
+      }
+      this.remainingVerifyIndex = 1;
+      return;
+    }
+
+    if (mock == FirstOrLast.LAST) {
+      for (let i = 0; i < this.mocks.length; i++) {
+        try {
+          this.verifyLambdas[i]();
+        } catch (e) {
+          throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e as Error });
+        }
+      }
+      this.remainingVerifyIndex = this.mocks.length;
+      return;
+    }
+
+    if (this.containsMoreThanOneMock && this.isMocksInCircleChain && mock == this.mocks[0]) {
+      throw new Error('Cannot call verifyThrough(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyThrough(FIRST) or verifyThrough(LAST).');
+    }
+
+    const objectIndexOfMock: number | undefined = this.mockMap.get(mock);
+
+    if (objectIndexOfMock == null) {
+      throw new Error('Cannot call verifyThrough(Object mock) for mock not in mocks!');
+    }
+
+    const indexOfMock: number = objectIndexOfMock;
+
+    for (let i = 0; i <= indexOfMock; i++) {
+      try {
+        this.verifyLambdas[i]();
+      } catch (e) {
+        throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e as Error });
+      }
+    }
+
+    this.remainingVerifyIndex = indexOfMock + 1;
   }
 
   /**
