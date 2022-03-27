@@ -25,30 +25,30 @@ describe('MofTest', () => {
 
         test('constructor_success', () => {
             new Mof.Builder()
-            .add(
-                mock1,
-                when1,
-                verify1
-            )
-            .build();
+                .add(
+                    mock1,
+                    when1,
+                    verify1
+                )
+                .build();
         });
 
         test('constructor_success', () => {
             new Mof.Builder()
-            .add(
-                mock1,
-                when1,
-                verify1
-            )
-            .build();
+                .add(
+                    mock1,
+                    when1,
+                    verify1
+                )
+                .build();
         });
 
         test('withVerifyNoInteractions_success', () => {
             new Mof.Builder()
                 .add(
-                        mock1,
-                        when1,
-                        verify1
+                    mock1,
+                    when1,
+                    verify1
                 )
                 .enableVerifyNoInteractions(verifyNoInteractionLambda)
                 .build();
