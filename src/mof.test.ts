@@ -99,5 +99,40 @@ describe('MofTest', () => {
                 )
                 .build();
         });
+
+        test('whenTwoMocksAreInASimpleClosedCurve_success', () => {
+            new Mof.Builder()
+                .add(
+                    mock1,
+                    when1,
+                    verify1
+                )
+                .add(
+                    mock1,
+                    when2,
+                    verify2
+                )
+                .build();
+        });
+
+        test('whenThreeMocksAreInASimpleClosedCurve_ThenSuccess', () => {
+            new Mof.Builder()
+                .add(
+                    mock1,
+                    when1,
+                    verify1
+                )
+                .add(
+                    mock2,
+                    when2,
+                    verify2
+                )
+                .add(
+                    mock1,
+                    when3,
+                    verify3
+                )
+                .build();
+        });
     });
 });
