@@ -22,7 +22,7 @@ export class Mof {
   private whenLambdas: (() => void)[];
   private verifyLambdas: (() => void)[];
 
-  private verifyNoInteractionLambda: (() => void) | null = null;
+  private verifyNoInteractionLambda: ((mock: unknown) => void) | null = null;
 
   private mockMap: Map<unknown, number>;
 
@@ -385,7 +385,49 @@ export class Mof {
    * @throws Not calling with ALL or REMAINING enum.
    */
   public verifyNoInteractions(aor: AllOrRemaining): void {
-    console.log("Unimplemented");
+    if (this.verifyNoInteractionLambda == null) {
+      throw new Error('Must enableVerifyNoInteractions before calling verifyNoInteractions.');
+    }
+
+    let stoppingIndex: number;
+
+    if (this.isMocksInCircleChain) {
+      if (this.mocks.length == 1) {
+        stoppingIndex = this.mocks.length;
+      } else if (this.mocks.length == 2) {
+        stoppingIndex = 0;
+      } else {
+        stoppingIndex = this.mocks.length - 1;
+      }
+    } else {
+      stoppingIndex = this.mocks.length;
+    }
+
+    if (aor == AllOrRemaining.ALL) {
+      for (let i = 0; i < stoppingIndex; i++) {
+        try {
+          this.verifyNoInteractionLambda(this.mocks[i]);
+        } catch (e) {
+          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an exception! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+        }
+      }
+      this.remainingVerifyIndex = this.mocks.length;
+      return;
+    }
+
+    if (aor == AllOrRemaining.REMAINING) {
+      for (let i = this.remainingVerifyIndex; i < stoppingIndex; i++) {
+        try {
+          this.verifyNoInteractionLambda(this.mocks[i]);
+        } catch (e) {
+          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an exception! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+        }
+      }
+      this.remainingVerifyIndex = this.mocks.length;
+      return;
+    }
+
+    throw new Error('aor must be ALL or REMAINING.');
   }
 
   /**
