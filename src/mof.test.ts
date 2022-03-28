@@ -363,6 +363,61 @@ describe('MofTest', () => {
                     expect(when3).toHaveBeenCalledTimes(1);
                 });
             });
+
+            describe('WhenRemaining', () => {
+
+                test('success', () => {
+                    mofSingleMock.when(REMAINING);
+
+                    expect(when1).toHaveBeenCalledTimes(1);
+                });
+
+                test('twoMocks_success', () => {
+                    mofTwoMocks.when(REMAINING);
+    
+                    expect(when1).toHaveBeenCalledTimes(1);
+                    expect(when2).toHaveBeenCalledTimes(1);
+                });
+    
+                test('threeMocks_success', () => {
+                    mofThreeMocks.when(REMAINING);
+    
+                    expect(when1).toHaveBeenCalledTimes(1);
+                    expect(when2).toHaveBeenCalledTimes(1);
+                    expect(when3).toHaveBeenCalledTimes(1);
+                });
+
+                test('twoMocksAreInASimpleClosedCurve_success', () => {
+                    mofTwoMocksInASimpleClosedCurve.when(REMAINING);
+    
+                    expect(when1).toHaveBeenCalledTimes(1);
+                    expect(when2).toHaveBeenCalledTimes(1);
+                });
+    
+                test('threeMocksAreInASimpleClosedCurve_success', () => {;
+                    mofThreeMocksInASimpleClosedCurve.when(REMAINING);
+    
+                    expect(when1).toHaveBeenCalledTimes(1);
+                    expect(when2).toHaveBeenCalledTimes(1);
+                    expect(when3).toHaveBeenCalledTimes(1);
+                });
+
+                test('calledWithMockThatThrowsError_ThenThrowError', () => {
+                    const expectedMessage = 'w1 throws an error! Please check your whens.';
+    
+                    when1.mockImplementation(() => { 
+                        throw new Error(); 
+                    });
+    
+                    expect(() => {
+                        mofThreeMocks.when(REMAINING);
+                    }).toThrow(expectedMessage);
+    
+                    expect(when1).toHaveBeenCalledTimes(1);
+                    expect(when2).toHaveBeenCalledTimes(0);
+                    expect(when3).toHaveBeenCalledTimes(0);
+                });
+            });
         });
     });
 });
