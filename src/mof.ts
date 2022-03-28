@@ -13,8 +13,10 @@ export interface MofBuilderConstructor {
 
 const ALL = AllOrRemaining.ALL;
 const REMAINING = AllOrRemaining.REMAINING;
+const FIRST = FirstOrLast.FIRST;
+const LAST = FirstOrLast.LAST;
 
-export { ALL, REMAINING };
+export { ALL, REMAINING, FIRST, LAST };
 
 export class Mof {
   public static ALL = AllOrRemaining.ALL;
