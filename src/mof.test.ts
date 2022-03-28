@@ -236,7 +236,7 @@ describe('MofTest', () => {
             }).toThrow(expectedMessage);
         });
 
-        test('whenMocksInANonSimpleCurve_ThenThrowIllegalArgumentException', () => {
+        test('whenMocksInANonSimpleCurve_ThenThrowError', () => {
             const expectedMessage = 'm3 cannot be the same as a previous mock in mocks!';
 
             expect(() => {

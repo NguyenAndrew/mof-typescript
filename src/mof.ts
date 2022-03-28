@@ -75,7 +75,7 @@ export class Mof {
         try {
           this.whenLambdas[i]();
         } catch (e) {
-          throw new Error(`w${i + 1} throws an exception! Please check your whens.`, { cause: e as Error });
+          throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
         }
       }
       this.remainingWhenIndex = this.mocks.length;
@@ -87,7 +87,7 @@ export class Mof {
         try {
           this.whenLambdas[i]();
         } catch (e) {
-          throw new Error(`w${i + 1} throws an exception! Please check your whens.`, { cause: e as Error });
+          throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
         }
       }
       this.remainingWhenIndex = this.mocks.length;
@@ -117,7 +117,7 @@ export class Mof {
         try {
           this.whenLambdas[i]();
         } catch (e) {
-          throw new Error(`w${i + 1} throws an exception! Please check your whens.`, { cause: e as Error });
+          throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
         }
       }
       this.remainingWhenIndex = this.mocks.length;
@@ -140,7 +140,7 @@ export class Mof {
       try {
         this.whenLambdas[i]();
       } catch (e) {
-        throw new Error(`w${i + 1} throws an exception! Please check your whens.`, { cause: e as Error });
+        throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
       }
     }
 
@@ -160,7 +160,7 @@ export class Mof {
         try {
           this.whenLambdas[i]();
         } catch (e) {
-          throw new Error(`w${i + 1} throws an exception! Please check your whens.`, { cause: e as Error });
+          throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
         }
       }
       this.remainingWhenIndex = this.mocks.length;
@@ -187,7 +187,7 @@ export class Mof {
       try {
         this.whenLambdas[i]();
       } catch (e) {
-        throw new Error(`w${i + 1} throws an exception! Please check your whens.`, { cause: e as Error });
+        throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
       }
     }
 
@@ -206,7 +206,7 @@ export class Mof {
         try {
           this.verifyLambdas[i]();
         } catch (e) {
-          throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e as Error });
+          throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -218,7 +218,7 @@ export class Mof {
         try {
           this.verifyLambdas[i]();
         } catch (e) {
-          throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e as Error });
+          throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -240,7 +240,7 @@ export class Mof {
       try {
         this.verifyLambdas[0]();
       } catch (e) {
-        throw new Error(`v${1} throws an exception! Please check your verifies.`, { cause: e as Error });
+        throw new Error(`v${1} throws an error! Please check your verifies.`, { cause: e as Error });
       }
       this.remainingVerifyIndex = 1;
       return;
@@ -251,7 +251,7 @@ export class Mof {
         try {
           this.verifyLambdas[i]();
         } catch (e) {
-          throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e as Error });
+          throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -274,7 +274,7 @@ export class Mof {
       try {
         this.verifyLambdas[i]();
       } catch (e) {
-        throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e as Error });
+        throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
       }
     }
 
@@ -300,7 +300,7 @@ export class Mof {
         try {
           this.verifyLambdas[i]();
         } catch (e) {
-          throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e as Error });
+          throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -323,7 +323,7 @@ export class Mof {
       try {
         this.verifyLambdas[i]();
       } catch (e) {
-        throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e as Error });
+        throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
       }
     }
 
@@ -343,7 +343,7 @@ export class Mof {
         try {
           this.verifyLambdas[i]();
         } catch (e) {
-          throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e as Error });
+          throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -370,7 +370,7 @@ export class Mof {
       try {
         this.verifyLambdas[i]();
       } catch (e) {
-        throw new Error(`v${i + 1} throws an exception! Please check your verifies.`, { cause: e as Error });
+        throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
       }
     }
 
@@ -413,7 +413,7 @@ export class Mof {
         try {
           this.verifyNoInteractionLambda(this.mocks[i]);
         } catch (e) {
-          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an exception! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an error! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -425,7 +425,7 @@ export class Mof {
         try {
           this.verifyNoInteractionLambda(this.mocks[i]);
         } catch (e) {
-          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an exception! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an error! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -467,7 +467,7 @@ export class Mof {
         try {
           this.verifyNoInteractionLambda(this.mocks[i]);
         } catch (e) {
-          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an exception! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an error! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -494,7 +494,7 @@ export class Mof {
       try {
         this.verifyNoInteractionLambda(this.mocks[i]);
       } catch (e) {
-        throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an exception! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+        throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an error! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
       }
     }
 
