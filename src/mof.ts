@@ -14,7 +14,7 @@ export interface MofBuilderConstructor {
 const ALL = AllOrRemaining.ALL;
 const REMAINING = AllOrRemaining.REMAINING;
 
-export { ALL, REMAINING};
+export { ALL, REMAINING };
 
 export class Mof {
   public static ALL = AllOrRemaining.ALL;
