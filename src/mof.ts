@@ -520,14 +520,6 @@ export class Mof {
         throw new Error("Cannot add null Mock to Mof Builder!");
       }
 
-      if (w == null) {
-        throw new Error("Cannot add null WhenLambda to Mof Builder!");
-      }
-
-      if (v == null) {
-        throw new Error("Cannot add null VerifyLambda to Mof Builder!");
-      }
-      
       this.mocks.push(m);
       this.whens.push(w);
       this.verifies.push(v);
