@@ -532,6 +532,10 @@ export class Mof {
     }
 
     public build(): Mof {
+      if (this.mocks.length == 0) {
+        throw new Error("Must add at least one mock before calling build on Mof Builder!");
+      }
+
       const mof: Mof = new Mof(
         this.mocks,
         this.whens,

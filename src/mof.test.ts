@@ -148,5 +148,13 @@ describe('MofTest', () => {
                     .build()
             }).toThrow(expectedMessage);
         });
+
+        test('whenBuilding_WithNoMocksAdded_ThenThrowError', () => {
+            const expectedMessage = 'Must add at least one mock before calling build on Mof Builder!';
+
+            expect(() => {
+                new Mof.Builder().build();
+            }).toThrow(expectedMessage);
+        });
     });
 });
