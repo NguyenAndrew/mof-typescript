@@ -302,7 +302,7 @@ describe('MofTest', () => {
             });
 
             test('calledWithMockThatThrowsError_ThenThrowError', () => {
-                const expectedMessage = 'w1 throws an exception! Please check your whens.';
+                const expectedMessage = 'w1 throws an error! Please check your whens.';
 
                 when1.mockImplementation(() => { 
                     throw new Error(); 
@@ -315,6 +315,19 @@ describe('MofTest', () => {
                 expect(when1).toHaveBeenCalledTimes(1);
                 expect(when2).toHaveBeenCalledTimes(0);
                 expect(when3).toHaveBeenCalledTimes(0);
+            });
+        });
+
+        describe('Remaining', () => {
+
+            describe('WhenAll', () => {
+
+                test('success', () => {
+                    mofSingleMock.when(ALL);
+                    mofSingleMock.when(REMAINING);
+
+                    expect(when1).toHaveBeenCalledTimes(1);
+                });
             });
         });
     });
