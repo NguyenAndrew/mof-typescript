@@ -145,7 +145,7 @@ describe('MofTest', () => {
                         when1,
                         verify1
                     )
-                    .build()
+                    .build();
             }).toThrow(expectedMessage);
         });
 
