@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FirstOrLast } from "./first-or-last";
 import { AllOrRemaining } from "./all-or-remaining";
 
