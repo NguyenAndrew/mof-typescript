@@ -156,5 +156,29 @@ describe('MofTest', () => {
                 new Mof.Builder().build();
             }).toThrow(expectedMessage);
         });
+
+        test('whenMocksInANonSimpleCurve_ThenThrowIllegalArgumentException', () => {
+            const expectedMessage = 'm3 cannot be the same as a previous mock in mocks!';
+
+            expect(() => {
+                new Mof.Builder()
+                    .add(
+                        mock1,
+                        when1,
+                        verify1
+                    )
+                    .add(
+                        mock2,
+                        when2,
+                        verify2
+                    )
+                    .add(
+                        mock2,
+                        when3,
+                        verify3
+                    )
+                    .build()
+            }).toThrow(expectedMessage);
+        });
     });
 });
