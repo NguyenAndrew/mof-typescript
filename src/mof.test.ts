@@ -22,6 +22,8 @@ describe('MofTest', () => {
     const verify3 = jest.fn();
 
     let mofSingleMock: Mof;
+    let mofTwoMocks: Mof;
+    let mofThreeMocks: Mof;
 
     beforeEach(() => {
         jest.resetAllMocks();
@@ -31,6 +33,37 @@ describe('MofTest', () => {
                 mock1,
                 when1,
                 verify1
+            )
+            .build();
+
+        mofTwoMocks = new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .add(
+                mock2,
+                when2,
+                verify2
+            )
+            .build();
+
+        mofThreeMocks = new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .add(
+                mock2,
+                when2,
+                verify2
+            )
+            .add(
+                mock3,
+                when3,
+                verify3
             )
             .build();
     });
@@ -205,6 +238,21 @@ describe('MofTest', () => {
                 mofSingleMock.when(ALL);
 
                 expect(when1).toHaveBeenCalledTimes(1);
+            });
+
+            test('twoMocks_success', () => {
+                mofTwoMocks.when(ALL);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(1);
+            });
+
+            test('threeMocks_success', () => {
+                mofThreeMocks.when(ALL);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(1);
+                expect(when3).toHaveBeenCalledTimes(1);
             });
         });
     });
