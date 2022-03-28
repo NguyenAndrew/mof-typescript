@@ -1,4 +1,5 @@
-import { Mof } from "./mof";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Mof, ALL, REMAINING } from "./mof";
 
 describe('MofTest', () => {
 
@@ -19,6 +20,20 @@ describe('MofTest', () => {
     const verify1 = jest.fn();
     const verify2 = jest.fn();
     const verify3 = jest.fn();
+
+    let mofSingleMock: Mof;
+
+    beforeEach(() => {
+        jest.resetAllMocks();
+
+        mofSingleMock = new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .build();
+    });
 
     describe('Builder', () => {
 
@@ -179,6 +194,18 @@ describe('MofTest', () => {
                     )
                     .build()
             }).toThrow(expectedMessage);
+        });
+    });
+
+    describe('When', () => {
+
+        describe('All', () => {
+
+            test('success', () => {
+                mofSingleMock.when(ALL);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+            });
         });
     });
 });
