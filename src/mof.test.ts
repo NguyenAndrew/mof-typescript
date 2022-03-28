@@ -328,6 +328,23 @@ describe('MofTest', () => {
 
                     expect(when1).toHaveBeenCalledTimes(1);
                 });
+
+                test('twoMocks_success', () => {
+                    mofTwoMocks.when(ALL);
+                    mofTwoMocks.when(REMAINING);
+    
+                    expect(when1).toHaveBeenCalledTimes(1);
+                    expect(when2).toHaveBeenCalledTimes(1);
+                });
+    
+                test('threeMocks_success', () => {
+                    mofThreeMocks.when(ALL);
+                    mofThreeMocks.when(REMAINING);
+    
+                    expect(when1).toHaveBeenCalledTimes(1);
+                    expect(when2).toHaveBeenCalledTimes(1);
+                    expect(when3).toHaveBeenCalledTimes(1);
+                });
             });
         });
     });
