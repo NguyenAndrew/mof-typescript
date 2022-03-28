@@ -345,6 +345,23 @@ describe('MofTest', () => {
                     expect(when2).toHaveBeenCalledTimes(1);
                     expect(when3).toHaveBeenCalledTimes(1);
                 });
+
+                test('twoMocksAreInASimpleClosedCurve_success', () => {
+                    mofTwoMocksInASimpleClosedCurve.when(ALL);
+                    mofTwoMocksInASimpleClosedCurve.when(REMAINING);
+    
+                    expect(when1).toHaveBeenCalledTimes(1);
+                    expect(when2).toHaveBeenCalledTimes(1);
+                });
+    
+                test('threeMocksAreInASimpleClosedCurve_success', () => {
+                    mofThreeMocksInASimpleClosedCurve.when(ALL);
+                    mofThreeMocksInASimpleClosedCurve.when(REMAINING);
+    
+                    expect(when1).toHaveBeenCalledTimes(1);
+                    expect(when2).toHaveBeenCalledTimes(1);
+                    expect(when3).toHaveBeenCalledTimes(1);
+                });
             });
         });
     });
