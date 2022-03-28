@@ -25,6 +25,9 @@ describe('MofTest', () => {
     let mofTwoMocks: Mof;
     let mofThreeMocks: Mof;
 
+    let mofTwoMocksInASimpleClosedCurve: Mof;
+    let mofThreeMocksInASimpleClosedCurve: Mof;
+
     beforeEach(() => {
         jest.resetAllMocks();
 
@@ -35,7 +38,6 @@ describe('MofTest', () => {
                 verify1
             )
             .build();
-
         mofTwoMocks = new Mof.Builder()
             .add(
                 mock1,
@@ -48,7 +50,6 @@ describe('MofTest', () => {
                 verify2
             )
             .build();
-
         mofThreeMocks = new Mof.Builder()
             .add(
                 mock1,
@@ -62,6 +63,36 @@ describe('MofTest', () => {
             )
             .add(
                 mock3,
+                when3,
+                verify3
+            )
+            .build();
+
+        mofTwoMocksInASimpleClosedCurve = new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .add(
+                mock1,
+                when2,
+                verify2
+            )
+            .build();
+        mofThreeMocksInASimpleClosedCurve = new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .add(
+                mock2,
+                when2,
+                verify2
+            )
+            .add(
+                mock1,
                 when3,
                 verify3
             )
@@ -249,6 +280,21 @@ describe('MofTest', () => {
 
             test('threeMocks_success', () => {
                 mofThreeMocks.when(ALL);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(1);
+                expect(when3).toHaveBeenCalledTimes(1);
+            });
+
+            test('twoMocksAreInASimpleClosedCurve_success', () => {
+                mofTwoMocksInASimpleClosedCurve.when(ALL);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(1);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurve.when(ALL);
 
                 expect(when1).toHaveBeenCalledTimes(1);
                 expect(when2).toHaveBeenCalledTimes(1);
