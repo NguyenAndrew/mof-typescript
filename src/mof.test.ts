@@ -509,6 +509,68 @@ describe('MofTest', () => {
                         expect(when3).toHaveBeenCalledTimes(0);
                     });
                 });
+
+                describe('Mock', () => {
+
+                    test('success', () => {
+                        mofSingleMock.whenBefore(mock1);
+                        mofSingleMock.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('twoMocks_onFirstMock_success', () => {
+                        mofTwoMocks.whenBefore(mock1);
+                        mofTwoMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('twoMocks_onSecondMock_success', () => {
+                        mofTwoMocks.whenBefore(mock2);
+                        mofTwoMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(1);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('threeMocks_onFirstMock_success', () => {
+                        mofThreeMocks.whenBefore(mock1);
+                        mofThreeMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                        expect(when3).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('threeMocks_onSecondMock_success', () => {
+                        mofThreeMocks.whenBefore(mock2);
+                        mofThreeMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(1);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                        expect(when3).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('threeMocks_onThirdMock_success', () => {
+                        mofThreeMocks.whenBefore(mock3);
+                        mofThreeMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(1);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                        expect(when3).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('threeMocksAreInASimpleClosedCurve_success', () => {
+                        mofThreeMocksInASimpleClosedCurve.whenBefore(mock2);
+                        mofThreeMocksInASimpleClosedCurve.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(1);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                        expect(when3).toHaveBeenCalledTimes(1);
+                    });
+                });
             });
         });
     });
