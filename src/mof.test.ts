@@ -572,6 +572,159 @@ describe('MofTest', () => {
                     });
                 });
             });
+
+            describe('WhenAfter', () => {
+
+                describe('First', () => {
+
+                    test('success', () => {
+                        mofSingleMock.whenAfter(FIRST);
+                        mofSingleMock.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('twoMocks_success', () => {
+                        mofTwoMocks.whenAfter(FIRST);
+                        mofTwoMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('threeMocks_success', () => {
+                        mofThreeMocks.whenAfter(FIRST);
+                        mofThreeMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                        expect(when3).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('twoMocksAreInASimpleClosedCurve_success', () => {
+                        mofTwoMocksInASimpleClosedCurve.whenAfter(FIRST);
+                        mofTwoMocksInASimpleClosedCurve.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('threeMocksAreInASimpleClosedCurve_success', () => {
+                        mofThreeMocksInASimpleClosedCurve.whenAfter(FIRST);
+                        mofThreeMocksInASimpleClosedCurve.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                        expect(when3).toHaveBeenCalledTimes(1);
+                    });
+                });
+
+                describe('Last', () => {
+
+                    test('success', () => {
+                        mofSingleMock.whenAfter(LAST);
+                        mofSingleMock.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('twoMocks_success', () => {
+                        mofTwoMocks.whenAfter(LAST);
+                        mofTwoMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('threeMocks_success', () => {
+                        mofThreeMocks.whenAfter(LAST);
+                        mofThreeMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                        expect(when3).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('twoMocksAreInASimpleClosedCurve_success', () => {
+                        mofTwoMocksInASimpleClosedCurve.whenAfter(LAST);
+                        mofTwoMocksInASimpleClosedCurve.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('threeMocksAreInASimpleClosedCurve_success', () => {
+                        mofThreeMocksInASimpleClosedCurve.whenAfter(LAST);
+                        mofThreeMocksInASimpleClosedCurve.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                        expect(when3).toHaveBeenCalledTimes(0);
+                    });
+                });
+
+                describe('Mock', () => {
+
+                    test('success', () => {
+                        mofSingleMock.whenAfter(mock1);
+                        mofSingleMock.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('twoMocks_onFirstMock_success', () => {
+                        mofTwoMocks.whenAfter(mock1);
+                        mofTwoMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('twoMocks_onSecondMock_success', () => {
+                        mofTwoMocks.whenAfter(mock2);
+                        mofTwoMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('threeMocks_onFirstMock_success', () => {
+                        mofThreeMocks.whenAfter(mock1);
+                        mofThreeMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                        expect(when3).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('threeMocks_onSecondMock_success', () => {
+                        mofThreeMocks.whenAfter(mock2);
+                        mofThreeMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                        expect(when3).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('threeMocks_onThirdMock_success', () => {
+                        mofThreeMocks.whenAfter(mock3);
+                        mofThreeMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                        expect(when3).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('threeMocksAreInASimpleClosedCurve_success', () => {
+                        mofThreeMocksInASimpleClosedCurve.whenAfter(mock2);
+                        mofThreeMocksInASimpleClosedCurve.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                        expect(when3).toHaveBeenCalledTimes(1);
+                    });
+                });
+            });
         });
     });
 });
