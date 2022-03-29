@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Mof, ALL, REMAINING, FIRST } from "./mof";
+import { Mof, ALL, REMAINING, FIRST, LAST } from "./mof";
 
 describe('MofTest', () => {
 
@@ -463,6 +463,50 @@ describe('MofTest', () => {
                         expect(when1).toHaveBeenCalledTimes(0);
                         expect(when2).toHaveBeenCalledTimes(1);
                         expect(when3).toHaveBeenCalledTimes(1);
+                    });
+                });
+
+                describe('Last', () => {
+
+                    test('success', () => {
+                        mofSingleMock.whenBefore(LAST);
+                        mofSingleMock.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('twoMocks_success', () => {
+                        mofTwoMocks.whenBefore(LAST);
+                        mofTwoMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(1);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('threeMocks_success', () => {
+                        mofThreeMocks.whenBefore(LAST);
+                        mofThreeMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(1);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                        expect(when3).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('twoMocksAreInASimpleClosedCurve_success', () => {
+                        mofTwoMocksInASimpleClosedCurve.whenBefore(LAST);
+                        mofTwoMocksInASimpleClosedCurve.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(1);
+                        expect(when2).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('threeMocksAreInASimpleClosedCurve_success', () => {
+                        mofThreeMocksInASimpleClosedCurve.whenBefore(LAST);
+                        mofThreeMocksInASimpleClosedCurve.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(1);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                        expect(when3).toHaveBeenCalledTimes(0);
                     });
                 });
             });
