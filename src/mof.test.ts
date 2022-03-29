@@ -13,6 +13,10 @@ describe('MofTest', () => {
         callExample = jest.fn()
     };
 
+    const mockNotInMocks = new class {
+        callExample = jest.fn()
+    };
+
     const when1 = jest.fn();
     const when2 = jest.fn();
     const when3 = jest.fn();
@@ -724,6 +728,209 @@ describe('MofTest', () => {
                         expect(when3).toHaveBeenCalledTimes(1);
                     });
                 });
+            });
+        });
+    });
+
+    describe('WhenBefore', () => {
+
+        describe('First', () => {
+
+            test('success', () => {
+                mofSingleMock.whenBefore(FIRST);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocks_success', () => {
+                mofTwoMocks.whenBefore(FIRST);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+                expect(when2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocks_success', () => {
+                mofThreeMocks.whenBefore(FIRST);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+                expect(when2).toHaveBeenCalledTimes(0);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocksAreInASimpleClosedCurve_success', () => {
+                mofTwoMocksInASimpleClosedCurve.whenBefore(FIRST);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+                expect(when2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurve.whenBefore(FIRST);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+                expect(when2).toHaveBeenCalledTimes(0);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+        });
+
+        describe('Last', () => {
+
+            test('success', () => {
+                mofSingleMock.whenBefore(LAST);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocks_success', () => {
+                mofTwoMocks.whenBefore(LAST);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocks_success', () => {
+                mofThreeMocks.whenBefore(LAST);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(1);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocksAreInASimpleClosedCurve_success', () => {
+                mofTwoMocksInASimpleClosedCurve.whenBefore(LAST);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurve.whenBefore(LAST);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(1);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+
+            test('calledWithMockThatThrowsError_ThenThrowError', () => {
+                const expectedMessage = 'w1 throws an error! Please check your whens.';
+
+                when1.mockImplementation(() => {
+                    throw new Error();
+                });
+
+                expect(() => {
+                    mofThreeMocks.whenBefore(LAST);
+                }).toThrow(expectedMessage);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(0);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+        });
+
+        describe('Mock', () => {
+
+            test('success', () => {
+                mofSingleMock.whenBefore(mock1);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocks_onFirstMock_success', () => {
+                mofTwoMocks.whenBefore(mock1);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+                expect(when2).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocks_onSecondMock_success', () => {
+                mofTwoMocks.whenBefore(mock2);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocks_onFirstMock_success', () => {
+                mofThreeMocks.whenBefore(mock1);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+                expect(when2).toHaveBeenCalledTimes(0);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocks_onSecondMock_success', () => {
+                mofThreeMocks.whenBefore(mock2);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(0);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocks_onThirdMock_success', () => {
+                mofThreeMocks.whenBefore(mock3);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(1);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurve.whenBefore(mock2);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(0);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocksAreInASimpleClosedCurve_onFirstLastMock_ThenThrowError', () => {
+                const expectedMessage = 'Cannot call whenBefore(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use whenBefore(FIRST) or whenBefore(LAST).';
+
+                expect(() => {
+                    mofTwoMocksInASimpleClosedCurve.whenBefore(mock1);
+                }).toThrow(expectedMessage);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+                expect(when2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_onFirstLastMock_ThenThrowError', () => {
+                const expectedMessage = 'Cannot call whenBefore(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use whenBefore(FIRST) or whenBefore(LAST).';
+
+                expect(() => {
+                    mofThreeMocksInASimpleClosedCurve.whenBefore(mock1);
+                }).toThrow(expectedMessage);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+                expect(when2).toHaveBeenCalledTimes(0);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+
+            test('calledWithMockNotInMocks_ThenThrowError', () => {
+                const expectedMessage = 'Cannot call whenBefore(Object mock) for mock not in mocks!';
+
+                expect(() => {
+                    mofThreeMocksInASimpleClosedCurve.whenBefore(mockNotInMocks);
+                }).toThrow(expectedMessage);
+
+                expect(when1).toHaveBeenCalledTimes(0);
+                expect(when2).toHaveBeenCalledTimes(0);
+                expect(when3).toHaveBeenCalledTimes(0);
+            });
+
+            test('calledWithMockThatThrowsError_ThenThrowError', () => {
+                const expectedMessage = 'w1 throws an error! Please check your whens.';
+
+                when1.mockImplementation(() => {
+                    throw new Error();
+                });
+
+                expect(() => {
+                    mofThreeMocks.whenBefore(mock3);
+                }).toThrow(expectedMessage);
+
+                expect(when1).toHaveBeenCalledTimes(1);
+                expect(when2).toHaveBeenCalledTimes(0);
+                expect(when3).toHaveBeenCalledTimes(0);
             });
         });
     });
