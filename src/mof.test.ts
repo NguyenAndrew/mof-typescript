@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Mof, ALL, REMAINING } from "./mof";
+import { Mof, ALL, REMAINING, FIRST } from "./mof";
 
 describe('MofTest', () => {
 
@@ -304,8 +304,8 @@ describe('MofTest', () => {
             test('calledWithMockThatThrowsError_ThenThrowError', () => {
                 const expectedMessage = 'w1 throws an error! Please check your whens.';
 
-                when1.mockImplementation(() => { 
-                    throw new Error(); 
+                when1.mockImplementation(() => {
+                    throw new Error();
                 });
 
                 expect(() => {
@@ -332,15 +332,15 @@ describe('MofTest', () => {
                 test('twoMocks_success', () => {
                     mofTwoMocks.when(ALL);
                     mofTwoMocks.when(REMAINING);
-    
+
                     expect(when1).toHaveBeenCalledTimes(1);
                     expect(when2).toHaveBeenCalledTimes(1);
                 });
-    
+
                 test('threeMocks_success', () => {
                     mofThreeMocks.when(ALL);
                     mofThreeMocks.when(REMAINING);
-    
+
                     expect(when1).toHaveBeenCalledTimes(1);
                     expect(when2).toHaveBeenCalledTimes(1);
                     expect(when3).toHaveBeenCalledTimes(1);
@@ -349,15 +349,15 @@ describe('MofTest', () => {
                 test('twoMocksAreInASimpleClosedCurve_success', () => {
                     mofTwoMocksInASimpleClosedCurve.when(ALL);
                     mofTwoMocksInASimpleClosedCurve.when(REMAINING);
-    
+
                     expect(when1).toHaveBeenCalledTimes(1);
                     expect(when2).toHaveBeenCalledTimes(1);
                 });
-    
+
                 test('threeMocksAreInASimpleClosedCurve_success', () => {
                     mofThreeMocksInASimpleClosedCurve.when(ALL);
                     mofThreeMocksInASimpleClosedCurve.when(REMAINING);
-    
+
                     expect(when1).toHaveBeenCalledTimes(1);
                     expect(when2).toHaveBeenCalledTimes(1);
                     expect(when3).toHaveBeenCalledTimes(1);
@@ -374,14 +374,14 @@ describe('MofTest', () => {
 
                 test('twoMocks_success', () => {
                     mofTwoMocks.when(REMAINING);
-    
+
                     expect(when1).toHaveBeenCalledTimes(1);
                     expect(when2).toHaveBeenCalledTimes(1);
                 });
-    
+
                 test('threeMocks_success', () => {
                     mofThreeMocks.when(REMAINING);
-    
+
                     expect(when1).toHaveBeenCalledTimes(1);
                     expect(when2).toHaveBeenCalledTimes(1);
                     expect(when3).toHaveBeenCalledTimes(1);
@@ -389,14 +389,15 @@ describe('MofTest', () => {
 
                 test('twoMocksAreInASimpleClosedCurve_success', () => {
                     mofTwoMocksInASimpleClosedCurve.when(REMAINING);
-    
+
                     expect(when1).toHaveBeenCalledTimes(1);
                     expect(when2).toHaveBeenCalledTimes(1);
                 });
-    
-                test('threeMocksAreInASimpleClosedCurve_success', () => {;
+
+                test('threeMocksAreInASimpleClosedCurve_success', () => {
+                    ;
                     mofThreeMocksInASimpleClosedCurve.when(REMAINING);
-    
+
                     expect(when1).toHaveBeenCalledTimes(1);
                     expect(when2).toHaveBeenCalledTimes(1);
                     expect(when3).toHaveBeenCalledTimes(1);
@@ -404,18 +405,65 @@ describe('MofTest', () => {
 
                 test('calledWithMockThatThrowsError_ThenThrowError', () => {
                     const expectedMessage = 'w1 throws an error! Please check your whens.';
-    
-                    when1.mockImplementation(() => { 
-                        throw new Error(); 
+
+                    when1.mockImplementation(() => {
+                        throw new Error();
                     });
-    
+
                     expect(() => {
                         mofThreeMocks.when(REMAINING);
                     }).toThrow(expectedMessage);
-    
+
                     expect(when1).toHaveBeenCalledTimes(1);
                     expect(when2).toHaveBeenCalledTimes(0);
                     expect(when3).toHaveBeenCalledTimes(0);
+                });
+            });
+
+            describe('WhenBefore', () => {
+
+                describe('First', () => {
+
+                    test('success', () => {
+                        mofSingleMock.whenBefore(FIRST);
+                        mofSingleMock.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                    });
+
+                    test('twoMocks_success', () => {
+                        mofTwoMocks.whenBefore(FIRST);
+                        mofTwoMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('threeMocks_success', () => {
+                        mofThreeMocks.whenBefore(FIRST);
+                        mofThreeMocks.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                        expect(when3).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('twoMocksAreInASimpleClosedCurve_success', () => {
+                        mofTwoMocksInASimpleClosedCurve.whenBefore(FIRST);
+                        mofTwoMocksInASimpleClosedCurve.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                    });
+
+                    test('threeMocksAreInASimpleClosedCurve_success', () => {
+                        mofThreeMocksInASimpleClosedCurve.whenBefore(FIRST);
+                        mofThreeMocksInASimpleClosedCurve.when(REMAINING);
+
+                        expect(when1).toHaveBeenCalledTimes(0);
+                        expect(when2).toHaveBeenCalledTimes(1);
+                        expect(when3).toHaveBeenCalledTimes(1);
+                    });
                 });
             });
         });
