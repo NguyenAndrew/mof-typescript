@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Mof, ALL, REMAINING, FIRST, LAST } from "./mof";
 
 describe('MofTest', () => {
@@ -3766,6 +3765,154 @@ describe('MofTest', () => {
                         expect(verifyNoInteractionLambda).toBeCalledTimes(0);
                     });
                 });
+            });
+        });
+
+        describe('Error', () => {
+
+            test('calledWhenNoInteractionsIsNotEnabled_ThenThrowError', () => {
+                const expectedMessage = 'Must enableVerifyNoInteractions before calling verifyNoInteractions.';
+
+                expect(() => {
+                    mofThreeMocks.verifyNoInteractions(ALL);
+                }).toThrow(expectedMessage);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+        });
+    });
+
+    describe('VerifyNoInteractionsAfter', () => {
+
+        describe('First', () => {
+
+            test('success', () => {
+                mofSingleMockWithVerifyNoInteractions.verifyNoInteractionsAfter(FIRST);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+
+            test('twoMocks_success', () => {
+                mofTwoMocksWithVerifyNoInteractions.verifyNoInteractionsAfter(FIRST);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(1);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock2);
+            });
+
+            test('threeMocks_success', () => {
+                mofThreeMocksWithVerifyNoInteractions.verifyNoInteractionsAfter(FIRST);
+                
+                expect(verifyNoInteractionLambda).toBeCalledTimes(2);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock2);
+                expect(verifyNoInteractionLambda).nthCalledWith(2, mock3);
+            });
+
+            test('twoMocksAreInASimpleClosedCurve_success', () => {
+                mofTwoMocksInASimpleClosedCurveWithVerifyNoInteractions.verifyNoInteractionsAfter(FIRST);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurveWithVerifyNoInteractions.verifyNoInteractionsAfter(FIRST);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(1);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock2);
+            });
+        });
+
+        describe('Last', () => {
+
+            test('success', () => {
+                mofSingleMockWithVerifyNoInteractions.verifyNoInteractionsAfter(LAST);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+
+            test('twoMocks_success', () => {
+                mofTwoMocksWithVerifyNoInteractions.verifyNoInteractionsAfter(LAST);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+
+            test('threeMocks_success', () => {
+                mofThreeMocksWithVerifyNoInteractions.verifyNoInteractionsAfter(LAST);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+
+            test('twoMocksAreInASimpleClosedCurve_success', () => {
+                mofTwoMocksInASimpleClosedCurveWithVerifyNoInteractions.verifyNoInteractionsAfter(LAST);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurveWithVerifyNoInteractions.verifyNoInteractionsAfter(LAST);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+        });
+
+        describe('Mock', () => {
+
+            test('success', () => {
+                mofSingleMockWithVerifyNoInteractions.verifyNoInteractionsAfter(mock1);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+
+            test('twoMocks_onFirstMock_success', () => {
+                mofTwoMocksWithVerifyNoInteractions.verifyNoInteractionsAfter(mock1);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(1);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock2);
+            });
+
+            test('twoMocks_onSecondMock_success', () => {
+                mofTwoMocksWithVerifyNoInteractions.verifyNoInteractionsAfter(mock2);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+
+            test('threeMocks_onFirstMock_success', () => {
+                mofThreeMocksWithVerifyNoInteractions.verifyNoInteractionsAfter(mock1);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(2);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock2);
+                expect(verifyNoInteractionLambda).nthCalledWith(2, mock3);
+            });
+
+            test('threeMocks_onSecondMock_success', () => {
+                mofThreeMocksWithVerifyNoInteractions.verifyNoInteractionsAfter(mock2);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(1);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock3);
+            });
+
+            test('threeMocks_onThirdMock_success', () => {
+                mofThreeMocksWithVerifyNoInteractions.verifyNoInteractionsAfter(mock3);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurveWithVerifyNoInteractions.verifyNoInteractionsAfter(mock2);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+        });
+
+        describe('Error', () => {
+
+            test('calledWhenNoInteractionsIsNotEnabled_ThenThrowError', () => {
+                const expectedMessage = 'Must enableVerifyNoInteractions before calling verifyNoInteractionsAfter.';
+
+                expect(() => {
+                    mofThreeMocks.verifyNoInteractionsAfter(mock1);
+                }).toThrow(expectedMessage);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
             });
         });
     });
