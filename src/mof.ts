@@ -3,7 +3,7 @@ import { AllOrRemaining } from "./all-or-remaining";
 
 export interface MofBuilder {
   add(m: unknown, w: (() => void), v: (() => void)): MofBuilder;
-  enableVerifyNoInteractions(verifyNoInteractionLambda: (() => void)): MofBuilder;
+  enableVerifyNoInteractions(verifyNoInteractionLambda: ((mock: unknown) => void)): MofBuilder;
   build(): Mof;
 }
 
@@ -379,7 +379,7 @@ export class Mof {
     this.remainingVerifyIndex = this.mocks.length;
   }
 
-  private enableVerifyNoInteractions(verifyNoInteractionLambda: (() => void) | null): Mof {
+  private enableVerifyNoInteractions(verifyNoInteractionLambda: ((mock: unknown) => void) | null): Mof {
     this.verifyNoInteractionLambda = verifyNoInteractionLambda;
     return this;
   }
@@ -509,7 +509,7 @@ export class Mof {
     private whens: (() => void)[];
     private verifies: (() => void)[];
 
-    private verifyNoInteractionLambda: (() => void) | null;
+    private verifyNoInteractionLambda: ((mock: unknown) => void) | null;
 
     /**
      * Creates a builder for Mof.
@@ -532,7 +532,7 @@ export class Mof {
       return this;
     }
 
-    public enableVerifyNoInteractions(verifyNoInteractionLambda: (() => void)): MofBuilder {
+    public enableVerifyNoInteractions(verifyNoInteractionLambda: ((mock: unknown) => void)): MofBuilder {
       this.verifyNoInteractionLambda = verifyNoInteractionLambda;
       return this;
     }

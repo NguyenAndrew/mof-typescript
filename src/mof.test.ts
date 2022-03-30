@@ -32,6 +32,15 @@ describe('MofTest', () => {
     let mofTwoMocksInASimpleClosedCurve: Mof;
     let mofThreeMocksInASimpleClosedCurve: Mof;
 
+    const verifyNoInteractionLambda = jest.fn();
+
+    let mofSingleMockWithVerifyNoInteractions: Mof;
+    let mofTwoMocksWithVerifyNoInteractions: Mof;
+    let mofThreeMocksWithVerifyNoInteractions: Mof;
+
+    let mofTwoMocksInASimpleClosedCurveWithVerifyNoInteractions: Mof;
+    let mofThreeMocksInASimpleClosedCurveWithVerifyNoInteractions: Mof;
+
     beforeEach(() => {
         jest.resetAllMocks();
 
@@ -100,6 +109,79 @@ describe('MofTest', () => {
                 when3,
                 verify3
             )
+            .build();
+
+
+        mofSingleMockWithVerifyNoInteractions = new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .enableVerifyNoInteractions(verifyNoInteractionLambda)
+            .build();
+        mofTwoMocksWithVerifyNoInteractions = new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .add(
+                mock2,
+                when2,
+                verify2
+            )
+            .enableVerifyNoInteractions(verifyNoInteractionLambda)
+            .build();
+        mofThreeMocksWithVerifyNoInteractions = new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .add(
+                mock2,
+                when2,
+                verify2
+            )
+            .add(
+                mock3,
+                when3,
+                verify3
+            )
+            .enableVerifyNoInteractions(verifyNoInteractionLambda)
+            .build();
+
+        mofTwoMocksInASimpleClosedCurveWithVerifyNoInteractions = new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .add(
+                mock1,
+                when2,
+                verify2
+            )
+            .enableVerifyNoInteractions(verifyNoInteractionLambda)
+            .build();
+        mofThreeMocksInASimpleClosedCurveWithVerifyNoInteractions = new Mof.Builder()
+            .add(
+                mock1,
+                when1,
+                verify1
+            )
+            .add(
+                mock2,
+                when2,
+                verify2
+            )
+            .add(
+                mock1,
+                when3,
+                verify3
+            )
+            .enableVerifyNoInteractions(verifyNoInteractionLambda)
             .build();
     });
 
@@ -1758,7 +1840,7 @@ describe('MofTest', () => {
     });
 
     describe('VerifyThrough', () => {
-                
+
         describe('First', () => {
 
             test('success', () => {
@@ -2380,5 +2462,628 @@ describe('MofTest', () => {
                 expect(verify3).toHaveBeenCalledTimes(0);
             });
         });
+    });
+
+    describe('VerifyNoInteractions', () => {
+
+        describe('All', () => {
+
+            test('success', () => {
+                mofSingleMockWithVerifyNoInteractions.verifyNoInteractions(ALL);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(1);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock1);
+            });
+
+            test('twoMocks_success', () => {
+                mofTwoMocksWithVerifyNoInteractions.verifyNoInteractions(ALL);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(2);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock1);
+                expect(verifyNoInteractionLambda).nthCalledWith(2, mock2);
+            });
+
+            test('threeMocks_success', () => {
+                mofThreeMocksWithVerifyNoInteractions.verifyNoInteractions(ALL);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(3);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock1);
+                expect(verifyNoInteractionLambda).nthCalledWith(2, mock2);
+                expect(verifyNoInteractionLambda).nthCalledWith(3, mock3);
+            });
+
+            test('twoMocksAreInASimpleClosedCurve_success', () => {
+                mofTwoMocksInASimpleClosedCurveWithVerifyNoInteractions.verifyNoInteractions(ALL);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurveWithVerifyNoInteractions.verifyNoInteractions(ALL);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(2);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock1);
+                expect(verifyNoInteractionLambda).nthCalledWith(2, mock2);
+            });
+
+            test('calledWithMockThatThrowsError_ThenThrowError', () => {
+                const expectedMessage = 'verifyNoInteractionLambda called with m1 throws an error! Please check your verifyNoInteractionLambda and mocks.';
+
+                verifyNoInteractionLambda.mockImplementation((mock) => {
+                    if (mock == mock1) {
+                        throw new Error();
+                    }
+                });
+
+                expect(() => {
+                    mofThreeMocksWithVerifyNoInteractions.verifyNoInteractions(ALL);
+                }).toThrow(expectedMessage);
+
+                expect(verifyNoInteractionLambda).toBeCalledTimes(1);
+                expect(verifyNoInteractionLambda).nthCalledWith(1, mock1);
+            });
+        });
+
+        // describe('Remaining', () => {
+
+        //     describe('VerifyAll', () => {
+
+        //         test('success', () => {
+        //             mofSingleMock.verify(ALL);
+        //             mofSingleMock.verify(REMAINING);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //         });
+
+        //         test('twoMocks_success', () => {
+        //             mofTwoMocks.verify(ALL);
+        //             mofTwoMocks.verify(REMAINING);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //             expect(verify2).toHaveBeenCalledTimes(1);
+        //         });
+
+        //         test('threeMocks_success', () => {
+        //             mofThreeMocks.verify(ALL);
+        //             mofThreeMocks.verify(REMAINING);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //             expect(verify2).toHaveBeenCalledTimes(1);
+        //             expect(verify3).toHaveBeenCalledTimes(1);
+        //         });
+
+        //         test('twoMocksAreInASimpleClosedCurve_success', () => {
+        //             mofTwoMocksInASimpleClosedCurve.verify(ALL);
+        //             mofTwoMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //             expect(verify2).toHaveBeenCalledTimes(1);
+        //         });
+
+        //         test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //             mofThreeMocksInASimpleClosedCurve.verify(ALL);
+        //             mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //             expect(verify2).toHaveBeenCalledTimes(1);
+        //             expect(verify3).toHaveBeenCalledTimes(1);
+        //         });
+        //     });
+
+        //     describe('VerifyRemaining', () => {
+
+        //         test('success', () => {
+        //             mofSingleMock.verify(REMAINING);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //         });
+
+        //         test('twoMocks_success', () => {
+        //             mofTwoMocks.verify(REMAINING);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //             expect(verify2).toHaveBeenCalledTimes(1);
+        //         });
+
+        //         test('threeMocks_success', () => {
+        //             mofThreeMocks.verify(REMAINING);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //             expect(verify2).toHaveBeenCalledTimes(1);
+        //             expect(verify3).toHaveBeenCalledTimes(1);
+        //         });
+
+        //         test('twoMocksAreInASimpleClosedCurve_success', () => {
+        //             mofTwoMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //             expect(verify2).toHaveBeenCalledTimes(1);
+        //         });
+
+        //         test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //             mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //             expect(verify2).toHaveBeenCalledTimes(1);
+        //             expect(verify3).toHaveBeenCalledTimes(1);
+        //         });
+
+        //         test('calledWithMockThatThrowsError_ThenThrowError', () => {
+        //             const expectedMessage = 'v1 throws an error! Please check your verifies.';
+
+        //             verify1.mockImplementation(() => {
+        //                 throw new Error();
+        //             });
+
+        //             expect(() => {
+        //                 mofThreeMocks.verify(REMAINING);
+        //             }).toThrow(expectedMessage);
+
+        //             expect(verify1).toHaveBeenCalledTimes(1);
+        //             expect(verify2).toHaveBeenCalledTimes(0);
+        //             expect(verify3).toHaveBeenCalledTimes(0);
+        //         });
+        //     });
+
+        //     describe('VerifyThrough', () => {
+
+        //         describe('First', () => {
+
+        //             test('success', () => {
+        //                 mofSingleMock.verifyThrough(FIRST);
+        //                 mofSingleMock.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('twoMocks_success', () => {
+        //                 mofTwoMocks.verifyThrough(FIRST);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_success', () => {
+        //                 mofThreeMocks.verifyThrough(FIRST);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('twoMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofTwoMocksInASimpleClosedCurve.verifyThrough(FIRST);
+        //                 mofTwoMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofThreeMocksInASimpleClosedCurve.verifyThrough(FIRST);
+        //                 mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+        //         });
+
+        //         describe('Last', () => {
+
+        //             test('success', () => {
+        //                 mofSingleMock.verifyThrough(LAST);
+        //                 mofSingleMock.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('twoMocks_success', () => {
+        //                 mofTwoMocks.verifyThrough(LAST);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_success', () => {
+        //                 mofThreeMocks.verifyThrough(LAST);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('twoMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofTwoMocksInASimpleClosedCurve.verifyThrough(LAST);
+        //                 mofTwoMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofThreeMocksInASimpleClosedCurve.verifyThrough(LAST);
+        //                 mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+        //         });
+
+        //         describe('Mock', () => {
+
+        //             test('success', () => {
+        //                 mofSingleMock.verifyThrough(mock1);
+        //                 mofSingleMock.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('twoMocks_onFirstMock_success', () => {
+        //                 mofTwoMocks.verifyThrough(mock1);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('twoMocks_onSecondMock_success', () => {
+        //                 mofTwoMocks.verifyThrough(mock2);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_onFirstMock_success', () => {
+        //                 mofThreeMocks.verifyThrough(mock1);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_onSecondMock_success', () => {
+        //                 mofThreeMocks.verifyThrough(mock2);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_onThirdMock_success', () => {
+        //                 mofThreeMocks.verifyThrough(mock3);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofThreeMocksInASimpleClosedCurve.verifyThrough(mock2);
+        //                 mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+        //         });
+        //     });
+
+        //     describe('VerifyBefore', () => {
+
+        //         describe('First', () => {
+
+        //             test('success', () => {
+        //                 mofSingleMock.verifyBefore(FIRST);
+        //                 mofSingleMock.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('twoMocks_success', () => {
+        //                 mofTwoMocks.verifyBefore(FIRST);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_success', () => {
+        //                 mofThreeMocks.verifyBefore(FIRST);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('twoMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofTwoMocksInASimpleClosedCurve.verifyBefore(FIRST);
+        //                 mofTwoMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofThreeMocksInASimpleClosedCurve.verifyBefore(FIRST);
+        //                 mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+        //         });
+
+        //         describe('Last', () => {
+
+        //             test('success', () => {
+        //                 mofSingleMock.verifyBefore(LAST);
+        //                 mofSingleMock.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('twoMocks_success', () => {
+        //                 mofTwoMocks.verifyBefore(LAST);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('threeMocks_success', () => {
+        //                 mofThreeMocks.verifyBefore(LAST);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('twoMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofTwoMocksInASimpleClosedCurve.verifyBefore(LAST);
+        //                 mofTwoMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofThreeMocksInASimpleClosedCurve.verifyBefore(LAST);
+        //                 mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(0);
+        //             });
+        //         });
+
+        //         describe('Mock', () => {
+
+        //             test('success', () => {
+        //                 mofSingleMock.verifyBefore(mock1);
+        //                 mofSingleMock.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('twoMocks_onFirstMock_success', () => {
+        //                 mofTwoMocks.verifyBefore(mock1);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('twoMocks_onSecondMock_success', () => {
+        //                 mofTwoMocks.verifyBefore(mock2);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('threeMocks_onFirstMock_success', () => {
+        //                 mofThreeMocks.verifyBefore(mock1);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_onSecondMock_success', () => {
+        //                 mofThreeMocks.verifyBefore(mock2);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_onThirdMock_success', () => {
+        //                 mofThreeMocks.verifyBefore(mock3);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofThreeMocksInASimpleClosedCurve.verifyBefore(mock2);
+        //                 mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(1);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+        //         });
+        //     });
+
+        //     describe('VerifyAfter', () => {
+
+        //         describe('First', () => {
+
+        //             test('success', () => {
+        //                 mofSingleMock.verifyAfter(FIRST);
+        //                 mofSingleMock.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('twoMocks_success', () => {
+        //                 mofTwoMocks.verifyAfter(FIRST);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_success', () => {
+        //                 mofThreeMocks.verifyAfter(FIRST);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('twoMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofTwoMocksInASimpleClosedCurve.verifyAfter(FIRST);
+        //                 mofTwoMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofThreeMocksInASimpleClosedCurve.verifyAfter(FIRST);
+        //                 mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+        //         });
+
+        //         describe('Last', () => {
+
+        //             test('success', () => {
+        //                 mofSingleMock.verifyAfter(LAST);
+        //                 mofSingleMock.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('twoMocks_success', () => {
+        //                 mofTwoMocks.verifyAfter(LAST);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('threeMocks_success', () => {
+        //                 mofThreeMocks.verifyAfter(LAST);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //                 expect(verify3).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('twoMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofTwoMocksInASimpleClosedCurve.verifyAfter(LAST);
+        //                 mofTwoMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofThreeMocksInASimpleClosedCurve.verifyAfter(LAST);
+        //                 mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //                 expect(verify3).toHaveBeenCalledTimes(0);
+        //             });
+        //         });
+
+        //         describe('Mock', () => {
+
+        //             test('success', () => {
+        //                 mofSingleMock.verifyAfter(mock1);
+        //                 mofSingleMock.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('twoMocks_onFirstMock_success', () => {
+        //                 mofTwoMocks.verifyAfter(mock1);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('twoMocks_onSecondMock_success', () => {
+        //                 mofTwoMocks.verifyAfter(mock2);
+        //                 mofTwoMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('threeMocks_onFirstMock_success', () => {
+        //                 mofThreeMocks.verifyAfter(mock1);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(1);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_onSecondMock_success', () => {
+        //                 mofThreeMocks.verifyAfter(mock2);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+
+        //             test('threeMocks_onThirdMock_success', () => {
+        //                 mofThreeMocks.verifyAfter(mock3);
+        //                 mofThreeMocks.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //                 expect(verify3).toHaveBeenCalledTimes(0);
+        //             });
+
+        //             test('threeMocksAreInASimpleClosedCurve_success', () => {
+        //                 mofThreeMocksInASimpleClosedCurve.verifyAfter(mock2);
+        //                 mofThreeMocksInASimpleClosedCurve.verify(REMAINING);
+
+        //                 expect(verify1).toHaveBeenCalledTimes(0);
+        //                 expect(verify2).toHaveBeenCalledTimes(0);
+        //                 expect(verify3).toHaveBeenCalledTimes(1);
+        //             });
+        //         });
+        //     });
+        // });
+
     });
 });
