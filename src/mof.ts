@@ -316,7 +316,7 @@ export class Mof {
     const objectIndexOfMock: number | undefined = this.mockMap.get(mock);
 
     if (objectIndexOfMock == null) {
-      throw new Error('Cannot call verifyBefore(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyBefore(FIRST) or verifyBefore(LAST).');
+      throw new Error('Cannot call verifyBefore(Object mock) for mock not in mocks!');
     }
 
     const indexOfMock: number = objectIndexOfMock;

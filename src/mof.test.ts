@@ -1975,4 +1975,207 @@ describe('MofTest', () => {
             });
         });
     });
+
+    describe('VerifyBefore', () => {
+
+        describe('First', () => {
+
+            test('success', () => {
+                mofSingleMock.verifyBefore(FIRST);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocks_success', () => {
+                mofTwoMocks.verifyBefore(FIRST);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocks_success', () => {
+                mofThreeMocks.verifyBefore(FIRST);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocksAreInASimpleClosedCurve_success', () => {
+                mofTwoMocksInASimpleClosedCurve.verifyBefore(FIRST);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurve.verifyBefore(FIRST);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+        });
+
+        describe('Last', () => {
+
+            test('success', () => {
+                mofSingleMock.verifyBefore(LAST);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocks_success', () => {
+                mofTwoMocks.verifyBefore(LAST);
+
+                expect(verify1).toHaveBeenCalledTimes(1);
+                expect(verify2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocks_success', () => {
+                mofThreeMocks.verifyBefore(LAST);
+
+                expect(verify1).toHaveBeenCalledTimes(1);
+                expect(verify2).toHaveBeenCalledTimes(1);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocksAreInASimpleClosedCurve_success', () => {
+                mofTwoMocksInASimpleClosedCurve.verifyBefore(LAST);
+
+                expect(verify1).toHaveBeenCalledTimes(1);
+                expect(verify2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurve.verifyBefore(LAST);
+
+                expect(verify1).toHaveBeenCalledTimes(1);
+                expect(verify2).toHaveBeenCalledTimes(1);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+
+            test('calledWithMockThatThrowsError_ThenThrowError', () => {
+                const expectedMessage = 'v1 throws an error! Please check your verifies.';
+
+                verify1.mockImplementation(() => {
+                    throw new Error();
+                });
+
+                expect(() => {
+                    mofThreeMocks.verifyBefore(LAST);
+                }).toThrow(expectedMessage);
+
+                expect(verify1).toHaveBeenCalledTimes(1);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+        });
+
+        describe('Mock', () => {
+
+            test('success', () => {
+                mofSingleMock.verifyBefore(mock1);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocks_onFirstMock_success', () => {
+                mofTwoMocks.verifyBefore(mock1);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocks_onSecondMock_success', () => {
+                mofTwoMocks.verifyBefore(mock2);
+
+                expect(verify1).toHaveBeenCalledTimes(1);
+                expect(verify2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocks_onFirstMock_success', () => {
+                mofThreeMocks.verifyBefore(mock1);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocks_onSecondMock_success', () => {
+                mofThreeMocks.verifyBefore(mock2);
+
+                expect(verify1).toHaveBeenCalledTimes(1);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocks_onThirdMock_success', () => {
+                mofThreeMocks.verifyBefore(mock3);
+
+                expect(verify1).toHaveBeenCalledTimes(1);
+                expect(verify2).toHaveBeenCalledTimes(1);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_success', () => {
+                mofThreeMocksInASimpleClosedCurve.verifyBefore(mock2);
+
+                expect(verify1).toHaveBeenCalledTimes(1);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+
+            test('twoMocksAreInASimpleClosedCurve_onFirstLastMock_ThenThrowError', () => {
+                const expectedMessage = 'Cannot call verifyBefore(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyBefore(FIRST) or verifyBefore(LAST).';
+
+                expect(() => {
+                    mofTwoMocksInASimpleClosedCurve.verifyBefore(mock1);
+                }).toThrow(expectedMessage);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+            });
+
+            test('threeMocksAreInASimpleClosedCurve_onFirstLastMock_ThenThrowError', () => {
+                const expectedMessage = 'Cannot call verifyBefore(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyBefore(FIRST) or verifyBefore(LAST).';
+
+                expect(() => {
+                    mofThreeMocksInASimpleClosedCurve.verifyBefore(mock1);
+                }).toThrow(expectedMessage);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+
+            test('calledWithMockNotInMocks_ThenThrowError', () => {
+                const expectedMessage = 'Cannot call verifyBefore(Object mock) for mock not in mocks!';
+
+                expect(() => {
+                    mofThreeMocksInASimpleClosedCurve.verifyBefore(mockNotInMocks);
+                }).toThrow(expectedMessage);
+
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+
+            test('calledWithMockThatThrowsError_ThenThrowError', () => {
+                const expectedMessage = 'v1 throws an error! Please check your verifies.';
+
+                verify1.mockImplementation(() => {
+                    throw new Error();
+                });
+
+                expect(() => {
+                    mofThreeMocks.verifyThrough(mock3);
+                }).toThrow(expectedMessage);
+
+                expect(verify1).toHaveBeenCalledTimes(1);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
+            });
+        });
+    });
 });
