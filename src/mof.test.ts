@@ -1930,8 +1930,8 @@ describe('MofTest', () => {
                     mofTwoMocksInASimpleClosedCurve.verifyThrough(mock1);
                 }).toThrow(expectedMessage);
 
-                expect(when1).toHaveBeenCalledTimes(0);
-                expect(when2).toHaveBeenCalledTimes(0);
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
             });
 
             test('threeMocksAreInASimpleClosedCurve_onFirstLastMock_ThenThrowError', () => {
@@ -1941,9 +1941,9 @@ describe('MofTest', () => {
                     mofThreeMocksInASimpleClosedCurve.verifyThrough(mock1);
                 }).toThrow(expectedMessage);
 
-                expect(when1).toHaveBeenCalledTimes(0);
-                expect(when2).toHaveBeenCalledTimes(0);
-                expect(when3).toHaveBeenCalledTimes(0);
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
             });
 
             test('calledWithMockNotInMocks_ThenThrowError', () => {
@@ -1953,9 +1953,9 @@ describe('MofTest', () => {
                     mofThreeMocksInASimpleClosedCurve.verifyThrough(mockNotInMocks);
                 }).toThrow(expectedMessage);
 
-                expect(when1).toHaveBeenCalledTimes(0);
-                expect(when2).toHaveBeenCalledTimes(0);
-                expect(when3).toHaveBeenCalledTimes(0);
+                expect(verify1).toHaveBeenCalledTimes(0);
+                expect(verify2).toHaveBeenCalledTimes(0);
+                expect(verify3).toHaveBeenCalledTimes(0);
             });
 
             test('calledWithMockThatThrowsError_ThenThrowError', () => {
