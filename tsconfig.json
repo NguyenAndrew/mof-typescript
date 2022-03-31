@@ -102,6 +102,7 @@
   },
   "include": ["src/**/*"],
   "typedocOptions": {
-    "excludePrivate": true
+    "excludePrivate": true,
+    "githubPages": false
   }
 }
