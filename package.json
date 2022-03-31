@@ -1,8 +1,12 @@
 {
   "name": "@andyln/mof",
-  "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.3.0",
+  "description": "The TypeScript (and JavaScript) library used to implement the Mock Orchestration Framework. Used in tests to reduce complex logic and boilerplate code in overall codebase.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "test": "jest",
     "lint": "eslint . --ext .ts",
