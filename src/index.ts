@@ -1,1 +1,1 @@
-export { Mof, ALL, REMAINING, FIRST, LAST } from "./mof";
+export { MofBuilder, Mof, ALL, REMAINING, FIRST, LAST } from "./mof";
