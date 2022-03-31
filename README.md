@@ -4,8 +4,8 @@ Readme in progress! Refer to https://github.com/NguyenAndrew/mof-java for more d
 
 To install this library run: `npm install --save-dev @andyln/mof`
 
-The TypeScript documentation can be found here: https://nguyenandrew.github.io/mof-typescript
+TypeScript documentation: https://nguyenandrew.github.io/mof-typescript
 
 ---
 
-The npm link is here: https://www.npmjs.com/package/@andyln/mof
+NPM Link: https://www.npmjs.com/package/@andyln/mof
