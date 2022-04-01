@@ -6,7 +6,7 @@
 
 The TypeScript (and JavaScript) library implementing the Mock Orchestration Framework (Mof). Used in tests to reduce complex logic and boilerplate code in overall codebase.
 
-*Looking for the Java library. Click here: https://github.com/NguyenAndrew/mof-java*
+*Looking for the Java library, click here: https://github.com/NguyenAndrew/mof-java*
 
 ([Install Instructions](#how-to-install), [Usage](#example-usages), and [FAQ](#faq) below)
 
