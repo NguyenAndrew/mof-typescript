@@ -6,25 +6,25 @@
 
 The TypeScript (and JavaScript) library implementing the Mock Orchestration Framework (Mof). Used in tests to reduce complex logic and boilerplate code in overall codebase.
 
-*Looking for the Java library, click here: https://github.com/NguyenAndrew/mof-java*
+_Looking for the Java library, click here: https://github.com/NguyenAndrew/mof-java_
 
 ([Install Instructions](#how-to-install), [Usage](#example-usages), and [FAQ](#faq) below)
 
-**Can reduce hours and days of writing unit tests into minutes!** 
+**Can reduce hours and days of writing unit tests into minutes!**
 
 Mof orchestrates all the mocks used within a method, allowing you to only write setup and verification code relevant for each unit test.
 
-* **Q:** Why Mof? **A:** Without it, each unit test needs to maintain the state and verification of its own mocks, and may become brittle when there are multiple units tests for a method. In other words, **mock orchestration helps prevent initial and ongoing tech debt within unit tests**.
+- **Q:** Why Mof? **A:** Without it, each unit test needs to maintain the state and verification of its own mocks, and may become brittle when there are multiple units tests for a method. In other words, **mock orchestration helps prevent initial and ongoing tech debt within unit tests**.
 
-**Mof is compatible with both TDD and non-TDD approaches**. This library helps augment the testing process, while letting the user choose "when" and "how often" to test. 
+**Mof is compatible with both TDD and non-TDD approaches**. This library helps augment the testing process, while letting the user choose "when" and "how often" to test.
 
 ## Simple Programming Paradigm (Explaining how Mof works with Simple Curves and Non-Simple Curves)
 
-For testing methods and creating new business logic, Mof helps encourage writing business logic using the Simple Programming Paradigm: Using Simple Curves over Non-Simple Curves. 
+For testing methods and creating new business logic, Mof helps encourage writing business logic using the Simple Programming Paradigm: Using Simple Curves over Non-Simple Curves.
 
-* Link that describes Simple Programming: https://github.com/NguyenAndrew/Simple-Programming
+- Link that describes Simple Programming: https://github.com/NguyenAndrew/Simple-Programming
 
-* For the below description, "Service" refers to any object that is @Autorwired, injected, or constructor injected into the object-under-test.
+- For the below description, "Service" refers to any object that is @Autorwired, injected, or constructor injected into the object-under-test.
 
 Examples of Simple Curves:
 
@@ -52,8 +52,8 @@ If the method you are testing happens to be a Non-Simple Curve, you can **Refact
 2. A -> B -> C -> D -> E -> F -> ... -> X -> B -> Y -> Z can be coverted to A -> N -> Y -> Z (where N internally calls B -> ... -> B)
 3. A -> B -> C -> B -> ... -> B -> C can be coverted to A -> N (where N internally calls B -> C)
 4. A -> B -> C -> D -> C -> B -> A can be converted in the following ways:
-    1. A -> N -> A (where N internally calls B -> C, D -> C, B as separate method calls). Useful if you want to create stricter boundaries between service layers, at the cost of creating more methods.
-    2. A -> N -> D -> C -> B -> A (where N internally calls B -> C -> D). Useful if you want to reduce amount of methods, at the cost of using services between multiple service layers.  
+   1. A -> N -> A (where N internally calls B -> C, D -> C, B as separate method calls). Useful if you want to create stricter boundaries between service layers, at the cost of creating more methods.
+   2. A -> N -> D -> C -> B -> A (where N internally calls B -> C -> D). Useful if you want to reduce amount of methods, at the cost of using services between multiple service layers.
 
 ## How to Install
 
@@ -96,10 +96,10 @@ const mof = new Mof.Builder()
     )
     .add(
         magnetron,
-        () => magnetron.heatFood.mockResolvedValue(SAMPLE_COOKED_FOOD), 
+        () => magnetron.heatFood.mockResolvedValue(SAMPLE_COOKED_FOOD),
         () => {
             expect(magnetron.heatFood).toBeCalledTimes(1);
-            expect(magnetron.heatFood).nthCalledWith(1, SAMPLE_UNCOOKED_FOOD);         
+            expect(magnetron.heatFood).nthCalledWith(1, SAMPLE_UNCOOKED_FOOD);
         }
     )
     .enableVerifyNoInteractions((mock) => expect(mock).not.toHaveBeenCalled())
@@ -114,7 +114,7 @@ const mof = new Mof.Builder()
 test('success', async () => {
     // Given (Setup data)
     const expected: Food = SAMPLE_HOT_FOOD;
-    
+
     // Given (Setup processors)
     mof.when(ALL);
 
@@ -137,14 +137,14 @@ test('success', async () => {
 test('whenMotorFails_ThenThrowAnException', async () => {
     // Given (Setup data)
     // No data to setup
-    
+
     // Given (Setup processors)
     mof.whenBefore(motor);
     motor.spinTurntable.mockResolvedValue(new Error());
 
     // When (Run the thing that you want to test)
     // Then (Asserting what you want to be true, is actually true)
-    await expect(microwave.heatFood(SAMPLE_COLD_FOOD, SAMPLE_SECONDS)).rejects.toThrow(SAMPLE_ERROR_MESSAGE); 
+    await expect(microwave.heatFood(SAMPLE_COLD_FOOD, SAMPLE_SECONDS)).rejects.toThrow(SAMPLE_ERROR_MESSAGE);
 
     // Verify (Asserting the processors are called in the way you want)
     mof.verifyThrough(motor);
@@ -170,7 +170,7 @@ TypeDoc documentation can be found here: https://nguyenandrew.github.io/mof-type
 
 **Q:** Won't this dependency create an additional maintance cost on my project?
 
-**A:** This library is MIT licensed and deployed out to npm. The source code is fully available and is fully unit tested to help provide developer confidence. Also, this library is easy to seperate and remove, as mentioned later in the FAQ. 
+**A:** This library is MIT licensed and deployed out to npm. The source code is fully available and is fully unit tested to help provide developer confidence. Also, this library is easy to seperate and remove, as mentioned later in the FAQ.
 
 ---
 
@@ -182,16 +182,17 @@ TypeDoc documentation can be found here: https://nguyenandrew.github.io/mof-type
 
 **Q:** I don't believe it is a good practice to couple a default set of verifies with whens. Doesn't this seem like an anti-pattern?
 
-**A:** Your test code is already doing this coupling implicity. This dependency defines this structure explicitly, through the construction of the Mof object(s), and takes advantage of this defined structure to achieve testing intelligence capabilities. 
+**A:** Your test code is already doing this coupling implicity. This dependency defines this structure explicitly, through the construction of the Mof object(s), and takes advantage of this defined structure to achieve testing intelligence capabilities.
 
 ---
 
 **Q:** What are these "testing intelligence capabilities"?
 
-**A:** Intelligence capabilities include: 
-* Encouraging code to become more straightforward through the Simple Programming paradigm
-* Avoiding under and overmocking through the usage of a framework (Mock Orchestration Framework)
-* Reusable code by reducing the amount of one-off private methods, and only needing to create the whens and verifies for a specific test.
+**A:** Intelligence capabilities include:
+
+- Encouraging code to become more straightforward through the Simple Programming paradigm
+- Avoiding under and overmocking through the usage of a framework (Mock Orchestration Framework)
+- Reusable code by reducing the amount of one-off private methods, and only needing to create the whens and verifies for a specific test.
 
 ---
 
@@ -227,9 +228,9 @@ TypeDoc documentation can be found here: https://nguyenandrew.github.io/mof-type
 
 **Q:** Following up on the previous question, what if I accidentally constructed the Mof object in the wrong order (such as timer -> magnetron -> motor)? Wouldn't that miss verifying unexpected behavior?
 
-**A:** You would be notified by your unit tests, and you would be able to fix the misorder. Mof prevents overmocking and verifies all methods that need to be verified. 
+**A:** You would be notified by your unit tests, and you would be able to fix the misorder. Mof prevents overmocking and verifies all methods that need to be verified.
 
-In the test case where you ran `mof.whenBefore(magnetron); ... mof.verifyBefore(magnetron); ... mof.verifyNoInteractions(REMAINING)`, and the business logic has the motor running before magnetron, then an exception would be thrown. 
+In the test case where you ran `mof.whenBefore(magnetron); ... mof.verifyBefore(magnetron); ... mof.verifyNoInteractions(REMAINING)`, and the business logic has the motor running before magnetron, then an exception would be thrown.
 
 The reason is that motor would have been called, but by stating `mof.verifyNoInteractions(REMAINING)`, the test would state something like: "Expected no calls to this method, but this method is called 1 time".
 
