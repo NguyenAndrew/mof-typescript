@@ -2,7 +2,7 @@
 
 ![GitHub](https://img.shields.io/github/license/NguyenAndrew/mof-typescript)
 [![npm (scoped)](https://img.shields.io/npm/v/@andyln/mof)](https://www.npmjs.com/package/@andyln/mof)
-[![typedoc](https://img.shields.io/badge/typedoc-0.5.0-green)](https://nguyenandrew.github.io/mof-typescript)
+[![typedoc](https://img.shields.io/badge/typedoc-0.6.0-green)](https://nguyenandrew.github.io/mof-typescript)
 
 The TypeScript (and JavaScript) library implementing the Mock Orchestration Framework (Mof). Used in tests to reduce complex logic and boilerplate code in overall codebase.
 
