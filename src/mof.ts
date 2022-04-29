@@ -2,13 +2,15 @@ import { FirstOrLast } from "./first-or-last";
 import { AllOrRemaining } from "./all-or-remaining";
 
 export interface MofBuilder {
-  add(m: unknown, w: (() => void), v: (() => void)): MofBuilder;
-  enableVerifyNoInteractions(verifyNoInteractionLambda: ((mock: unknown) => void)): MofBuilder;
+  add(m: unknown, w: () => void, v: () => void): MofBuilder;
+  enableVerifyNoInteractions(
+    verifyNoInteractionLambda: (mock: unknown) => void
+  ): MofBuilder;
   build(): Mof;
 }
 
 export interface MofBuilderConstructor {
-  new(): MofBuilder
+  new (): MofBuilder;
 }
 
 const ALL = AllOrRemaining.ALL;
@@ -50,13 +52,18 @@ export class Mof {
 
     this.isMocksInCircleChain = mocks[0] == mocks[mocks.length - 1];
 
-    const lengthOfMocksToCheck: number = this.isMocksInCircleChain && this.containsMoreThanOneMock ? mocks.length - 1 : mocks.length;
+    const lengthOfMocksToCheck: number =
+      this.isMocksInCircleChain && this.containsMoreThanOneMock
+        ? mocks.length - 1
+        : mocks.length;
     for (let i = 0; i < lengthOfMocksToCheck; i++) {
       const potentiallyDuplicateMock: unknown = this.mockMap.get(mocks[i]);
       this.mockMap.set(mocks[i], i);
       const isDuplicateMock: boolean = potentiallyDuplicateMock != null;
       if (isDuplicateMock) {
-        throw new Error(`m${i + 1} cannot be the same as a previous mock in mocks!`);
+        throw new Error(
+          `m${i + 1} cannot be the same as a previous mock in mocks!`
+        );
       }
     }
 
@@ -77,7 +84,15 @@ export class Mof {
         try {
           this.whenLambdas[i]();
         } catch (e) {
-          throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `w${
+              i + 1
+            } throws an error! Please check your whens. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingWhenIndex = this.mocks.length;
@@ -89,7 +104,15 @@ export class Mof {
         try {
           this.whenLambdas[i]();
         } catch (e) {
-          throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `w${
+              i + 1
+            } throws an error! Please check your whens. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingWhenIndex = this.mocks.length;
@@ -101,7 +124,7 @@ export class Mof {
 
   /**
    * Runs all whens up to, **not** including, the mock.
-   * 
+   *
    * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
    * @throws Calling with object not in mocks.
    * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
@@ -119,21 +142,37 @@ export class Mof {
         try {
           this.whenLambdas[i]();
         } catch (e) {
-          throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `w${
+              i + 1
+            } throws an error! Please check your whens. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingWhenIndex = this.mocks.length;
       return;
     }
 
-    if (this.containsMoreThanOneMock && this.isMocksInCircleChain && mock == this.mocks[0]) {
-      throw new Error('Cannot call whenBefore(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use whenBefore(FIRST) or whenBefore(LAST).');
+    if (
+      this.containsMoreThanOneMock &&
+      this.isMocksInCircleChain &&
+      mock == this.mocks[0]
+    ) {
+      throw new Error(
+        "Cannot call whenBefore(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use whenBefore(FIRST) or whenBefore(LAST)."
+      );
     }
 
     const objectIndexOfMock: number | undefined = this.mockMap.get(mock);
 
     if (objectIndexOfMock == null) {
-      throw new Error('Cannot call whenBefore(Object mock) for mock not in mocks!')
+      throw new Error(
+        "Cannot call whenBefore(Object mock) for mock not in mocks!"
+      );
     }
 
     const indexOfMock = objectIndexOfMock;
@@ -142,7 +181,13 @@ export class Mof {
       try {
         this.whenLambdas[i]();
       } catch (e) {
-        throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
+        const error: Error = e as Error;
+        throw new Error(
+          `w${i + 1} throws an error! Please check your whens. Error Message: ${
+            error.message
+          }`,
+          { cause: error }
+        );
       }
     }
 
@@ -151,7 +196,7 @@ export class Mof {
 
   /**
    * Runs all whens after, **not** including, the mock.
-   * 
+   *
    * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
    * @throws Calling with object not in mocks.
    * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
@@ -162,7 +207,15 @@ export class Mof {
         try {
           this.whenLambdas[i]();
         } catch (e) {
-          throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `w${
+              i + 1
+            } throws an error! Please check your whens. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingWhenIndex = this.mocks.length;
@@ -175,21 +228,35 @@ export class Mof {
       return;
     }
 
-    if (this.containsMoreThanOneMock && this.isMocksInCircleChain && mock == this.mocks[0]) {
-      throw new Error('Cannot call whenAfter(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use whenAfter(FIRST) or whenAfter(LAST).');
+    if (
+      this.containsMoreThanOneMock &&
+      this.isMocksInCircleChain &&
+      mock == this.mocks[0]
+    ) {
+      throw new Error(
+        "Cannot call whenAfter(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use whenAfter(FIRST) or whenAfter(LAST)."
+      );
     }
 
     const objectIndexOfMock: number | undefined = this.mockMap.get(mock);
 
     if (objectIndexOfMock == null) {
-      throw new Error('Cannot call whenAfter(Object mock) for mock not in mocks!');
+      throw new Error(
+        "Cannot call whenAfter(Object mock) for mock not in mocks!"
+      );
     }
 
     for (let i = objectIndexOfMock + 1; i < this.mocks.length; i++) {
       try {
         this.whenLambdas[i]();
       } catch (e) {
-        throw new Error(`w${i + 1} throws an error! Please check your whens.`, { cause: e as Error });
+        const error: Error = e as Error;
+        throw new Error(
+          `w${i + 1} throws an error! Please check your whens. Error Message: ${
+            error.message
+          }`,
+          { cause: error }
+        );
       }
     }
 
@@ -198,7 +265,7 @@ export class Mof {
 
   /**
    * Runs ALL or REMAINING verifies.
-   * 
+   *
    * @param aor ALL or REMAINING enum.
    * @throws Not calling with ALL or REMAINING enum.
    */
@@ -208,7 +275,15 @@ export class Mof {
         try {
           this.verifyLambdas[i]();
         } catch (e) {
-          throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `v${
+              i + 1
+            } throws an error! Please check your verifies. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -220,7 +295,15 @@ export class Mof {
         try {
           this.verifyLambdas[i]();
         } catch (e) {
-          throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `v${
+              i + 1
+            } throws an error! Please check your verifies. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -232,7 +315,7 @@ export class Mof {
 
   /**
    * Runs all verifies up to, and including, the mock.
-   * 
+   *
    * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
    * @throws Calling with object not in mocks.
    * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
@@ -242,7 +325,13 @@ export class Mof {
       try {
         this.verifyLambdas[0]();
       } catch (e) {
-        throw new Error(`v${1} throws an error! Please check your verifies.`, { cause: e as Error });
+        const error: Error = e as Error;
+        throw new Error(
+          `v${1} throws an error! Please check your verifies. Error Message: ${
+            error.message
+          }`,
+          { cause: error }
+        );
       }
       this.remainingVerifyIndex = 1;
       return;
@@ -253,21 +342,37 @@ export class Mof {
         try {
           this.verifyLambdas[i]();
         } catch (e) {
-          throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `v${
+              i + 1
+            } throws an error! Please check your verifies. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
       return;
     }
 
-    if (this.containsMoreThanOneMock && this.isMocksInCircleChain && mock == this.mocks[0]) {
-      throw new Error('Cannot call verifyThrough(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyThrough(FIRST) or verifyThrough(LAST).');
+    if (
+      this.containsMoreThanOneMock &&
+      this.isMocksInCircleChain &&
+      mock == this.mocks[0]
+    ) {
+      throw new Error(
+        "Cannot call verifyThrough(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyThrough(FIRST) or verifyThrough(LAST)."
+      );
     }
 
     const objectIndexOfMock: number | undefined = this.mockMap.get(mock);
 
     if (objectIndexOfMock == null) {
-      throw new Error('Cannot call verifyThrough(Object mock) for mock not in mocks!');
+      throw new Error(
+        "Cannot call verifyThrough(Object mock) for mock not in mocks!"
+      );
     }
 
     const indexOfMock: number = objectIndexOfMock;
@@ -276,7 +381,15 @@ export class Mof {
       try {
         this.verifyLambdas[i]();
       } catch (e) {
-        throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
+        const error: Error = e as Error;
+        throw new Error(
+          `v${
+            i + 1
+          } throws an error! Please check your verifies. Error Message: ${
+            error.message
+          }`,
+          { cause: error }
+        );
       }
     }
 
@@ -285,7 +398,7 @@ export class Mof {
 
   /**
    * Runs all verifies up to, **not** including, the mock.
-   * 
+   *
    * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
    * @throws Calling with object not in mocks.
    * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
@@ -302,21 +415,37 @@ export class Mof {
         try {
           this.verifyLambdas[i]();
         } catch (e) {
-          throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `v${
+              i + 1
+            } throws an error! Please check your verifies. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
       return;
     }
 
-    if (this.containsMoreThanOneMock && this.isMocksInCircleChain && mock == this.mocks[0]) {
-      throw new Error('Cannot call verifyBefore(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyBefore(FIRST) or verifyBefore(LAST).');
+    if (
+      this.containsMoreThanOneMock &&
+      this.isMocksInCircleChain &&
+      mock == this.mocks[0]
+    ) {
+      throw new Error(
+        "Cannot call verifyBefore(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyBefore(FIRST) or verifyBefore(LAST)."
+      );
     }
 
     const objectIndexOfMock: number | undefined = this.mockMap.get(mock);
 
     if (objectIndexOfMock == null) {
-      throw new Error('Cannot call verifyBefore(Object mock) for mock not in mocks!');
+      throw new Error(
+        "Cannot call verifyBefore(Object mock) for mock not in mocks!"
+      );
     }
 
     const indexOfMock: number = objectIndexOfMock;
@@ -325,7 +454,15 @@ export class Mof {
       try {
         this.verifyLambdas[i]();
       } catch (e) {
-        throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
+        const error: Error = e as Error;
+        throw new Error(
+          `v${
+            i + 1
+          } throws an error! Please check your verifies. Error Message: ${
+            error.message
+          }`,
+          { cause: error }
+        );
       }
     }
 
@@ -334,7 +471,7 @@ export class Mof {
 
   /**
    * Runs all verifies after, **not** including, the mock.
-   * 
+   *
    * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
    * @throws Calling with object not in mocks.
    * @throws Calling with ambiguous first or last mock. Example: In a Simple Closed Curve `A -> B -> A`, when calling with A, do you mean the first or lack mock? Instead of passing A, Use FIRST or LAST instead.
@@ -345,7 +482,15 @@ export class Mof {
         try {
           this.verifyLambdas[i]();
         } catch (e) {
-          throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `v${
+              i + 1
+            } throws an error! Please check your verifies. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -358,42 +503,62 @@ export class Mof {
       return;
     }
 
-    if (this.containsMoreThanOneMock && this.isMocksInCircleChain && mock == this.mocks[0]) {
-      throw new Error('Cannot call verifyAfter(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyAfter(FIRST) or verifyAfter(LAST).');
+    if (
+      this.containsMoreThanOneMock &&
+      this.isMocksInCircleChain &&
+      mock == this.mocks[0]
+    ) {
+      throw new Error(
+        "Cannot call verifyAfter(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyAfter(FIRST) or verifyAfter(LAST)."
+      );
     }
 
     const objectIndexOfMock: number | undefined = this.mockMap.get(mock);
 
     if (objectIndexOfMock == null) {
-      throw new Error('Cannot call verifyAfter(Object mock) for mock not in mocks!');
+      throw new Error(
+        "Cannot call verifyAfter(Object mock) for mock not in mocks!"
+      );
     }
 
     for (let i = objectIndexOfMock + 1; i < this.mocks.length; i++) {
       try {
         this.verifyLambdas[i]();
       } catch (e) {
-        throw new Error(`v${i + 1} throws an error! Please check your verifies.`, { cause: e as Error });
+        const error: Error = e as Error;
+        throw new Error(
+          `v${
+            i + 1
+          } throws an error! Please check your verifies. Error Message: ${
+            error.message
+          }`,
+          { cause: error }
+        );
       }
     }
 
     this.remainingVerifyIndex = this.mocks.length;
   }
 
-  private enableVerifyNoInteractions(verifyNoInteractionLambda: ((mock: unknown) => void) | null): Mof {
+  private enableVerifyNoInteractions(
+    verifyNoInteractionLambda: ((mock: unknown) => void) | null
+  ): Mof {
     this.verifyNoInteractionLambda = verifyNoInteractionLambda;
     return this;
   }
 
   /**
    * Runs no interaction lambda for ALL or REMAINING mocks.
-   * 
+   *
    * @param aor - ALL or REMAINING enum.
    * @throws Calling this method when verifyNoInteractions is not enabled.
    * @throws Not calling with ALL or REMAINING enum.
    */
   public verifyNoInteractions(aor: AllOrRemaining): void {
     if (this.verifyNoInteractionLambda == null) {
-      throw new Error('Must enableVerifyNoInteractions before calling verifyNoInteractions.');
+      throw new Error(
+        "Must enableVerifyNoInteractions before calling verifyNoInteractions."
+      );
     }
 
     let stoppingIndex: number;
@@ -415,7 +580,15 @@ export class Mof {
         try {
           this.verifyNoInteractionLambda(this.mocks[i]);
         } catch (e) {
-          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an error! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `verifyNoInteractionLambda called with m${
+              i + 1
+            } throws an error! Please check your verifyNoInteractionLambda and mocks. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -427,19 +600,27 @@ export class Mof {
         try {
           this.verifyNoInteractionLambda(this.mocks[i]);
         } catch (e) {
-          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an error! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `verifyNoInteractionLambda called with m${
+              i + 1
+            } throws an error! Please check your verifyNoInteractionLambda and mocks. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
       return;
     }
 
-    throw new Error('aor must be ALL or REMAINING.');
+    throw new Error("aor must be ALL or REMAINING.");
   }
 
   /**
    * Runs no interaction lambda for all mocks that are **only** after, but not including, mock passed into method.
-   * 
+   *
    * @param mock - Any mock within mocks. Note: Excludes ambiguous first/last mock in a Simple Closed Curve (In case of ambiguity, use FIRST or LAST enum).
    * @throws Calling this method when verifyNoInteractions is not enabled.
    * @throws Calling with object not in mocks.
@@ -447,7 +628,9 @@ export class Mof {
    */
   public verifyNoInteractionsAfter(mock: unknown): void {
     if (this.verifyNoInteractionLambda == null) {
-      throw new Error('Must enableVerifyNoInteractions before calling verifyNoInteractionsAfter.');
+      throw new Error(
+        "Must enableVerifyNoInteractions before calling verifyNoInteractionsAfter."
+      );
     }
 
     let stoppingIndex: number;
@@ -469,7 +652,15 @@ export class Mof {
         try {
           this.verifyNoInteractionLambda(this.mocks[i]);
         } catch (e) {
-          throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an error! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+          const error: Error = e as Error;
+          throw new Error(
+            `verifyNoInteractionLambda called with m${
+              i + 1
+            } throws an error! Please check your verifyNoInteractionLambda and mocks. Error Message: ${
+              error.message
+            }`,
+            { cause: error }
+          );
         }
       }
       this.remainingVerifyIndex = this.mocks.length;
@@ -482,29 +673,46 @@ export class Mof {
       return;
     }
 
-    if (this.containsMoreThanOneMock && this.isMocksInCircleChain && mock == this.mocks[0]) {
-      throw new Error('Cannot call verifyNoInteractionsAfter(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyNoInteractionsAfter(FIRST) or verifyNoInteractionsAfter(LAST).');
+    if (
+      this.containsMoreThanOneMock &&
+      this.isMocksInCircleChain &&
+      mock == this.mocks[0]
+    ) {
+      throw new Error(
+        "Cannot call verifyNoInteractionsAfter(Object mock) for ambiguous first/last mock in a simple closed curve! For mocks in a simple closed curve, use verifyNoInteractionsAfter(FIRST) or verifyNoInteractionsAfter(LAST)."
+      );
     }
 
     const objectIndexOfMock: number | undefined = this.mockMap.get(mock);
 
     if (objectIndexOfMock == null) {
-      throw new Error('Cannot call verifyNoInteractionsAfter(Object mock) for mock not in mocks!');
+      throw new Error(
+        "Cannot call verifyNoInteractionsAfter(Object mock) for mock not in mocks!"
+      );
     }
 
     for (let i = objectIndexOfMock + 1; i < stoppingIndex; i++) {
       try {
         this.verifyNoInteractionLambda(this.mocks[i]);
       } catch (e) {
-        throw new Error(`verifyNoInteractionLambda called with m${i + 1} throws an error! Please check your verifyNoInteractionLambda and mocks.`, { cause: e as Error });
+        const error: Error = e as Error;
+        throw new Error(
+          `verifyNoInteractionLambda called with m${
+            i + 1
+          } throws an error! Please check your verifyNoInteractionLambda and mocks. Error Message: ${
+            error.message
+          }`,
+          { cause: error }
+        );
       }
     }
 
     this.remainingVerifyIndex = this.mocks.length;
   }
 
-  public static Builder: MofBuilderConstructor = class Builder implements MofBuilder {
-
+  public static Builder: MofBuilderConstructor = class Builder
+    implements MofBuilder
+  {
     private mocks: unknown[];
     private whens: (() => void)[];
     private verifies: (() => void)[];
@@ -521,7 +729,7 @@ export class Mof {
       this.verifyNoInteractionLambda = null;
     }
 
-    public add(m: unknown, w: (() => void), v: (() => void)): MofBuilder {
+    public add(m: unknown, w: () => void, v: () => void): MofBuilder {
       if (m == null) {
         throw new Error("Cannot add null Mock to Mof Builder!");
       }
@@ -532,21 +740,21 @@ export class Mof {
       return this;
     }
 
-    public enableVerifyNoInteractions(verifyNoInteractionLambda: ((mock: unknown) => void)): MofBuilder {
+    public enableVerifyNoInteractions(
+      verifyNoInteractionLambda: (mock: unknown) => void
+    ): MofBuilder {
       this.verifyNoInteractionLambda = verifyNoInteractionLambda;
       return this;
     }
 
     public build(): Mof {
       if (this.mocks.length == 0) {
-        throw new Error("Must add at least one mock before calling build on Mof Builder!");
+        throw new Error(
+          "Must add at least one mock before calling build on Mof Builder!"
+        );
       }
 
-      const mof: Mof = new Mof(
-        this.mocks,
-        this.whens,
-        this.verifies
-      );
+      const mof: Mof = new Mof(this.mocks, this.whens, this.verifies);
       mof.enableVerifyNoInteractions(this.verifyNoInteractionLambda);
 
       return mof;
